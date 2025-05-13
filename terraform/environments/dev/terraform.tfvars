@@ -1,7 +1,3 @@
-function_name = "hello-world-dev"
-handler       = "com.project.FuncaoUmHandler::handleRequest"
-filename      = "../lambda/funcaoum/target/funcaoum-1.0-SNAPSHOT.jar"
-
 hello_function_name = "hello-world-dev"
 hello_handler       = "com.project.FuncaoUmHandler::handleRequest"
 hello_filename      = "../lambda/funcaoum/target/funcaoum-1.0-SNAPSHOT.jar"

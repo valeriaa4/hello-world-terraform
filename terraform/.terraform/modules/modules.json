@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 {"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"lambda_funcao_um","Source":"./modules/lambda","Dir":"modules/lambda"}]}
 =======
 {"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"lambda-dois","Source":"./modules/lambda-dois","Dir":"modules/lambda-dois"},{"Key":"lambda-um","Source":"./modules/lambda-um","Dir":"modules/lambda-um"},{"Key":"lambda_funcao_dois","Source":"./modules/lambda-dois","Dir":"modules/lambda-dois"},{"Key":"lambda_funcao_um","Source":"./modules/lambda-um","Dir":"modules/lambda-um"}]}
 >>>>>>> feature/lambda-create-item
+=======
+{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"lambda_funcao_um","Source":"./modules/lambda","Dir":"modules/lambda"}]}
+>>>>>>> main
