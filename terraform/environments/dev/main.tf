@@ -12,3 +12,11 @@ module "lambda-dois" {
   filename       = var.create_filename
   table_name     = var.create_table_name
 }
+
+module "lambda-tres" {
+  source         = "../../modules/lambda-tres"
+  function_name  = var.update_function_name
+  handler        = var.update_handler
+  filename       = var.update_filename
+  table_name     = var.update_table_name
+}

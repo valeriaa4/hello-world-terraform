@@ -32,3 +32,23 @@ variable "create_table_name" {
   description = "Nome da tabela DynamoDB usada pela função create"
   type        = string
 }
+
+variable "update_function_name" {
+  description = "Nome da função Lambda create"
+  type        = string
+}
+
+variable "update_handler" {
+  description = "Handler da função Lambda create"
+  type        = string
+}
+
+variable "update_filename" {
+  description = "Arquivo zip da função Lambda create"
+  type        = string
+}
+
+variable "update_table_name" {
+  description = "Nome da tabela DynamoDB usada pela função create"
+  type        = string
+}
