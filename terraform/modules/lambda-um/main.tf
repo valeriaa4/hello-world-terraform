@@ -17,7 +17,7 @@ resource "aws_iam_role_policy_attachment" "lambda_logs" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_lambda_function" "lambda" {
+resource "aws_lambda_function" "lambda-um" {
   function_name    = var.function_name
   role             = aws_iam_role.lambda_exec.arn
   handler          = var.handler

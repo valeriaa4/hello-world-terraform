@@ -1,3 +1,34 @@
-variable "function_name" {}
-variable "handler" {}
-variable "filename" {}
+variable "hello_function_name" {
+  description = "Nome da função Lambda hello"
+  type        = string
+}
+
+variable "hello_handler" {
+  description = "Handler da função Lambda hello"
+  type        = string
+}
+
+variable "hello_filename" {
+  description = "Arquivo zip da função Lambda hello"
+  type        = string
+}
+
+variable "create_function_name" {
+  description = "Nome da função Lambda create"
+  type        = string
+}
+
+variable "create_handler" {
+  description = "Handler da função Lambda create"
+  type        = string
+}
+
+variable "create_filename" {
+  description = "Arquivo zip da função Lambda create"
+  type        = string
+}
+
+variable "create_table_name" {
+  description = "Nome da tabela DynamoDB usada pela função create"
+  type        = string
+}
