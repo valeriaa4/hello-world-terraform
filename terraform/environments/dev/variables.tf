@@ -52,3 +52,23 @@ variable "update_table_name" {
   description = "Nome da tabela DynamoDB usada pela função create"
   type        = string
 }
+
+variable "remove_function_name" {
+  description = "Nome da função Lambda remove"
+  type        = string
+}
+
+variable "remove_handler" {
+  description = "Handler da função Lambda remove"
+  type        = string
+}
+
+variable "remove_filename" {
+  description = "Arquivo zip da função Lambda remove"
+  type        = string
+}
+
+variable "remove_table_name" {
+  description = "Nome da tabela DynamoDB usada pela função remove"
+  type        = string
+}

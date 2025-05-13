@@ -20,3 +20,11 @@ module "lambda-tres" {
   filename       = var.update_filename
   table_name     = var.update_table_name
 }
+
+module "lambda-quatro" {
+  source         = "./modules/lambda-quatro"
+  function_name  = var.remove_function_name
+  handler        = var.remove_handler
+  filename       = var.remove_filename
+  table_name     = var.remove_table_name
+}

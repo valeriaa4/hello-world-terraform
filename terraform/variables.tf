@@ -34,21 +34,41 @@ variable "create_table_name" {
 }
 
 variable "update_function_name" {
-  description = "Nome da função Lambda create"
+  description = "Nome da função Lambda update"
   type        = string
 }
 
 variable "update_handler" {
-  description = "Handler da função Lambda create"
+  description = "Handler da função Lambda update"
   type        = string
 }
 
 variable "update_filename" {
-  description = "Arquivo zip da função Lambda create"
+  description = "Arquivo zip da função Lambda update"
   type        = string
 }
 
 variable "update_table_name" {
-  description = "Nome da tabela DynamoDB usada pela função create"
+  description = "Nome da tabela DynamoDB usada pela função update"
+  type        = string
+}
+
+variable "remove_function_name" {
+  description = "Nome da função Lambda remove"
+  type        = string
+}
+
+variable "remove_handler" {
+  description = "Handler da função Lambda remove"
+  type        = string
+}
+
+variable "remove_filename" {
+  description = "Arquivo zip da função Lambda remove"
+  type        = string
+}
+
+variable "remove_table_name" {
+  description = "Nome da tabela DynamoDB usada pela função remove"
   type        = string
 }
