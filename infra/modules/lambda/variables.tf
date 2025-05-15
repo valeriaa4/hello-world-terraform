@@ -1,7 +1,7 @@
 variable "function_name" {}
 variable "handler" {}
 variable "runtime" {
-  default = "java21"
+  default = "python3.12"
 }
 variable "filename" {}
 variable "memory_size" {
@@ -17,6 +17,6 @@ variable "environment" {
 }
 
 variable "table_name" {
-  description = "Nome da tabela DynamoDB usada pela função FuncaoDoisHandler"
+  description = "Nome da tabela DynamoDB usada"
   type        = string
 }
