@@ -1,14 +1,32 @@
-variable "function_name" {}
-variable "handler" {}
+variable "function_name" {
+  type = string
+}
+
+variable "handler" {
+  type = string
+}
+
 variable "runtime" {
+  type = string
   default = "python3.12"
 }
-variable "filename" {}
-variable "memory_size" {
-  default = 512
+
+variable "filename" {
+  type = string
 }
+
+variable "source_code_hash" {
+  type = string
+}
+
+variable "memory_size" {
+  type = number
+  default = 256
+}
+
 variable "timeout" {
-  default = 30
+  type = number
+  default = 20
 }
 
 variable "environment" {
@@ -17,6 +35,6 @@ variable "environment" {
 }
 
 variable "table_name" {
-  description = "Nome da tabela DynamoDB usada"
-  type        = string
+  type    = string
+  default = null
 }
