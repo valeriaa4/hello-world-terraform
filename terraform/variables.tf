@@ -1,74 +1,20 @@
-variable "hello_function_name" {
-  description = "Nome da função Lambda hello"
-  type        = string
+variable "runtime" {
+  type = string
+  default = "python3.12"
 }
 
-variable "hello_handler" {
-  description = "Handler da função Lambda hello"
-  type        = string
+variable "memory_size" {
+  type = number
+  default = 256
 }
 
-variable "hello_filename" {
-  description = "Arquivo zip da função Lambda hello"
-  type        = string
+variable "timeout" {
+  type = number
+  default = 20
 }
 
-variable "create_function_name" {
-  description = "Nome da função Lambda create"
+variable "table_name" {
+  description = "Nome da tabela DynamoDB"
   type        = string
-}
-
-variable "create_handler" {
-  description = "Handler da função Lambda create"
-  type        = string
-}
-
-variable "create_filename" {
-  description = "Arquivo zip da função Lambda create"
-  type        = string
-}
-
-variable "create_table_name" {
-  description = "Nome da tabela DynamoDB usada pela função create"
-  type        = string
-}
-
-variable "update_function_name" {
-  description = "Nome da função Lambda update"
-  type        = string
-}
-
-variable "update_handler" {
-  description = "Handler da função Lambda update"
-  type        = string
-}
-
-variable "update_filename" {
-  description = "Arquivo zip da função Lambda update"
-  type        = string
-}
-
-variable "update_table_name" {
-  description = "Nome da tabela DynamoDB usada pela função update"
-  type        = string
-}
-
-variable "remove_function_name" {
-  description = "Nome da função Lambda remove"
-  type        = string
-}
-
-variable "remove_handler" {
-  description = "Handler da função Lambda remove"
-  type        = string
-}
-
-variable "remove_filename" {
-  description = "Arquivo zip da função Lambda remove"
-  type        = string
-}
-
-variable "remove_table_name" {
-  description = "Nome da tabela DynamoDB usada pela função remove"
-  type        = string
+  default     = null
 }
