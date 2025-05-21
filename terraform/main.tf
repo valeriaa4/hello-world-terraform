@@ -87,3 +87,14 @@ module "delete_item" {
     TABLE_NAME = "MARKET_LIST"
   }
 }
+
+
+
+module "cognito" {
+  source = "../infra/modules/cognito"
+
+  user_pool_name         = "market-user-pool"
+  user_pool_client_name  = "market-client"
+  enable_user_pool_domain = true
+  user_pool_domain        = "market-auth"
+}
