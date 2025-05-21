@@ -18,3 +18,24 @@ variable "table_name" {
   type        = string
   default     = null
 }
+
+
+# NOVAS VARIÁVEIS PARA COGNITO
+variable "user_pool_name" {
+  description = "Nome do Cognito User Pool"
+  type        = string
+  default     = "market-user-pool"
+}
+
+variable "app_client_name" {
+  description = "Nome do Cognito App Client"
+  type        = string
+  default     = "market-client-app"
+}
+
+
+variable "user_pool_domain" {
+  description = "Domínio do Cognito (subdomínio único)"
+  type        = string
+  default     = "market-app-demo" # subdomínio, precisa ser único na região
+}
