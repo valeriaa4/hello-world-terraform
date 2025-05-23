@@ -1,6 +1,6 @@
 resource "aws_iam_role" "lambda_exec" {
   count = var.create_role ? 1 : 0
-  name = "${var.function_name}-role"
+  name  = "${var.function_name}-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -32,9 +32,9 @@ resource "aws_lambda_function" "lambda" {
     for_each = var.table_name != null ? [1] : []
     content {
       variables = {
-        TABLE_NAME = var.table_name
+        TABLE_NAME  = var.table_name
         HTTP_METHOD = var.http_method
-        value_path = var.value_path
+        value_path  = var.value_path
       }
     }
   }
@@ -43,7 +43,7 @@ resource "aws_lambda_function" "lambda" {
 
 resource "aws_iam_role_policy" "dynamodb_access" {
   count = var.table_name != null ? 1 : 0 # cria a policy apenas se table_name for != null
-  role = aws_iam_role.lambda_exec[count.index].name
+  role  = aws_iam_role.lambda_exec[count.index].name
 
   policy = jsonencode({
     Version = "2012-10-17"

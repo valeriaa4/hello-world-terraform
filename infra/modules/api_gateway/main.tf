@@ -18,15 +18,15 @@ resource "aws_api_gateway_authorizer" "apigw_authorizer" {
 
 resource "aws_api_gateway_resource" "api_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
-  path_part   = "${var.value_path}"
+  path_part   = var.value_path
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
 resource "aws_api_gateway_method" "api_method" {
-  resource_id      = aws_api_gateway_resource.api_resource.id
-  rest_api_id      = aws_api_gateway_rest_api.create_api.id
-  http_method      = "${var.http_method}"
-  authorization    = "COGNITO_USER_POOLS"
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  rest_api_id   = aws_api_gateway_rest_api.create_api.id
+  http_method   = var.http_method
+  authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
 
@@ -43,7 +43,7 @@ resource "aws_lambda_permission" "apigw_lambda_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = var.function_name
-  principal     = "apigateway.amazonaws.com" 
+  principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }
 

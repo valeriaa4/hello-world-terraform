@@ -6,12 +6,12 @@ variable "region" {
 
 variable "http_method" {
   description = "Métodos HTTP"
-  type = string
+  type        = string
 }
 
 variable "value_path" {
   description = "value_path"
-  type = string
+  type        = string
 }
 
 variable "invoke_arn" {

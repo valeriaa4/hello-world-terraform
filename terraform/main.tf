@@ -40,7 +40,7 @@ module "create_item" {
   timeout          = var.timeout
   filename         = data.archive_file.create_item.output_path
   source_code_hash = data.archive_file.create_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -62,7 +62,7 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -84,7 +84,7 @@ module "delete_item" {
   timeout          = var.timeout
   filename         = data.archive_file.delete_item.output_path
   source_code_hash = data.archive_file.delete_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -103,12 +103,12 @@ module "cognito" {
 
 
 module "api_gateway" {
-  source      = "../infra/modules/api_gateway"
+  source = "../infra/modules/api_gateway"
 
-  http_method = var.http_method
-  value_path  = var.value_path
-  invoke_arn  = module.hello_terraform.invoke_arn
-  function_name = module.hello_terraform.function_name
+  http_method           = var.http_method
+  value_path            = var.value_path
+  invoke_arn            = module.hello_terraform.invoke_arn
+  function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
 
