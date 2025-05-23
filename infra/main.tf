@@ -6,7 +6,7 @@ data "archive_file" "hello_terraform" {
 }
 
 module "hello_terraform" {
-  source           = "../infra/modules/lambda"
+  source           = "./modules/lambda"
   function_name    = "hello-terraform"
   value_path       = "hello"
   http_method      = "GET"
@@ -20,7 +20,7 @@ module "hello_terraform" {
 
 #config dynamodb
 module "dynamodb" {
-  source     = "../infra/modules/dynamodb"
+  source     = "./modules/dynamodb"
   table_name = "MARKET_LIST"
 }
 
@@ -32,7 +32,7 @@ data "archive_file" "create_item" {
 }
 
 module "create_item" {
-  source           = "../infra/modules/lambda"
+  source           = "./modules/lambda"
   function_name    = "create-item"
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
@@ -54,7 +54,7 @@ data "archive_file" "update_item" {
 }
 
 module "update_item" {
-  source           = "../infra/modules/lambda"
+  source           = "./modules/lambda"
   function_name    = "update-item"
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
@@ -76,7 +76,7 @@ data "archive_file" "delete_item" {
 }
 
 module "delete_item" {
-  source           = "../infra/modules/lambda"
+  source           = "./modules/lambda"
   function_name    = "delete-item"
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
@@ -93,17 +93,17 @@ module "delete_item" {
 
 
 module "cognito" {
-  source = "../infra/modules/cognito"
+  source = "./modules/cognito"
 
   user_pool_name          = "market-user-pool"
   user_pool_client_name   = "market-client"
   enable_user_pool_domain = true
-  user_pool_domain        = "market-auth-gaby" #mudar depois
+  user_pool_domain        = "market-auth"
 }
 
 
 module "api_gateway" {
-  source = "../infra/modules/api_gateway"
+  source = "./modules/api_gateway"
 
   http_method           = var.http_method
   value_path            = var.value_path
