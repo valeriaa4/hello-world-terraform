@@ -9,3 +9,8 @@ output "user_pool_client_id" {
 output "user_pool_domain" {
   value = var.enable_user_pool_domain ? aws_cognito_user_pool_domain.this[0].domain : ""
 }
+
+output "user_pool_arn" {
+  value = aws_cognito_user_pool.this.arn
+}
+

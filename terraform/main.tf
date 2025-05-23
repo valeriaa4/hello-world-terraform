@@ -8,6 +8,8 @@ data "archive_file" "hello_terraform" {
 module "hello_terraform" {
   source           = "../infra/modules/lambda"
   function_name    = "hello-terraform"
+  value_path       = "hello"
+  http_method      = "GET"
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
@@ -38,7 +40,7 @@ module "create_item" {
   timeout          = var.timeout
   filename         = data.archive_file.create_item.output_path
   source_code_hash = data.archive_file.create_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -60,7 +62,7 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -82,7 +84,7 @@ module "delete_item" {
   timeout          = var.timeout
   filename         = data.archive_file.delete_item.output_path
   source_code_hash = data.archive_file.delete_item.output_base64sha256
-  table_name = "MARKET_LIST"
+  table_name       = "MARKET_LIST"
   environment = {
     TABLE_NAME = "MARKET_LIST"
   }
@@ -93,8 +95,21 @@ module "delete_item" {
 module "cognito" {
   source = "../infra/modules/cognito"
 
-  user_pool_name         = "market-user-pool"
-  user_pool_client_name  = "market-client"
+  user_pool_name          = "market-user-pool"
+  user_pool_client_name   = "market-client"
   enable_user_pool_domain = true
-  user_pool_domain        = "market-auth"
+  user_pool_domain        = "market-auth-gaby" #mudar depois
 }
+
+
+module "api_gateway" {
+  source = "../infra/modules/api_gateway"
+
+  http_method           = var.http_method
+  value_path            = var.value_path
+  invoke_arn            = module.hello_terraform.invoke_arn
+  function_name         = module.hello_terraform.function_name
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+}
+
+
