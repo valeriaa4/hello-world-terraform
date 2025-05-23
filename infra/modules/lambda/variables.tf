@@ -38,3 +38,21 @@ variable "table_name" {
   type    = string
   default = null
 }
+
+variable "http_method" {
+  description = "Métodos HTTP"
+  type        = string
+  default     = "GET"
+}
+
+variable "value_path" {
+  description = "value_path"
+  type        = string
+  default     = "/hello"
+}
+
+variable "create_role" {
+  type        = bool
+  description = "Criar uma nova funcao"
+  default     = true
+}

@@ -1,4 +1,5 @@
 resource "aws_iam_role" "lambda_exec" {
+  count = var.create_role ? 1 : 0
   name = "${var.function_name}-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -13,13 +14,14 @@ resource "aws_iam_role" "lambda_exec" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.lambda_exec.name
+  count      = var.create_role ? 1 : 0
+  role       = aws_iam_role.lambda_exec[0].name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_lambda_function" "lambda" {
   function_name    = var.function_name
-  role             = aws_iam_role.lambda_exec.arn
+  role             = aws_iam_role.lambda_exec[0].arn
   handler          = var.handler
   runtime          = var.runtime
   filename         = var.filename
@@ -31,6 +33,8 @@ resource "aws_lambda_function" "lambda" {
     content {
       variables = {
         TABLE_NAME = var.table_name
+        HTTP_METHOD = var.http_method
+        value_path = var.value_path
       }
     }
   }
@@ -39,7 +43,7 @@ resource "aws_lambda_function" "lambda" {
 
 resource "aws_iam_role_policy" "dynamodb_access" {
   count = var.table_name != null ? 1 : 0 # cria a policy apenas se table_name for != null
-  role = aws_iam_role.lambda_exec.name
+  role = aws_iam_role.lambda_exec[count.index].name
 
   policy = jsonencode({
     Version = "2012-10-17"

@@ -1,15 +1,15 @@
 variable "runtime" {
-  type = string
+  type    = string
   default = "python3.12"
 }
 
 variable "memory_size" {
-  type = number
+  type    = number
   default = 256
 }
 
 variable "timeout" {
-  type = number
+  type    = number
   default = 20
 }
 
@@ -39,3 +39,32 @@ variable "user_pool_domain" {
   type        = string
   default     = "market-app-demo" # subdomínio, precisa ser único na região
 }
+
+
+# NOVAS VARIÁVEIS PARA API GATEWAY
+variable "http_method" {
+  description = "Métodos HTTP"
+  type        = string
+  default     = "GET"
+}
+
+variable "value_path" {
+  description = "value_path"
+  type        = string
+  default     = "hello"
+}
+
+
+variable "region" {
+  description = "Região AWS"
+  type        = string
+  default     = "us-east-1"
+}
+
+
+
+
+
+
+
+
