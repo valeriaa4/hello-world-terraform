@@ -33,23 +33,23 @@ jobs:
         terraform_version: 1.11.4
 
     - name: Terraform Init
-      working-directory: ../infra
+      working-directory: ./infra
       run: terraform init
 
     - name: Terraform Format Check
-      working-directory: ../infra
+      working-directory: ./infra
       run: terraform fmt -check -recursive
 
     - name: Terraform Validate
-      working-directory: ../infra
+      working-directory: ./infra
       run: terraform validate
 
     - name: Terraform Plan
-      working-directory: ../infra
+      working-directory: ./infra
       run: terraform plan
 
     - name: Terraform Apply 
-      working-directory: ../infra
+      working-directory: ./infra
       run: terraform apply -auto-approve
 
     - name: Show Python version
@@ -57,7 +57,7 @@ jobs:
 
     - name: Show Terraform version
       run: terraform version
-      working-directory: ../infra
+      working-directory: ./infra
 
     - name: Done
       run: echo "Deployment complete!"
