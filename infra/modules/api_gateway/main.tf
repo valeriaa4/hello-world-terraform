@@ -36,7 +36,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.invoke_arn
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.invoke_arn}/invocations"
 }
 
 resource "aws_lambda_permission" "apigw_lambda_permission" {
@@ -59,7 +59,6 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     ]))
   }
 
-
   lifecycle {
     create_before_destroy = true
   }
@@ -75,11 +74,3 @@ resource "aws_api_gateway_stage" "api_stage" {
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
   deployment_id = aws_api_gateway_deployment.api_deployment.id
 }
-
-
-
-
-
-
-
-
