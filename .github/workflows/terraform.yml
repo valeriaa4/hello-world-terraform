@@ -1,0 +1,66 @@
+name: Deploy on Merge to Dev
+
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r lambda/requirements.txt
+
+    - name: Configurar AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.11.4
+
+    - name: Terraform Init
+      working-directory: ./infra
+      run: terraform init
+
+    - name: Terraform Format Check
+      working-directory: ./infra
+      run: terraform fmt -check -recursive
+
+    - name: Terraform Validate
+      working-directory: ./infra
+      run: terraform validate
+
+    - name: Terraform Plan
+      working-directory: ./infra
+      run: terraform plan
+
+    - name: Terraform Apply 
+      working-directory: ./infra
+      run: terraform apply -auto-approve
+
+    - name: Show Python version
+      run: python --version
+
+    - name: Show Terraform version
+      run: terraform version
+      working-directory: ./infra
+
+    - name: Done
+      run: echo "Deployment complete!"
