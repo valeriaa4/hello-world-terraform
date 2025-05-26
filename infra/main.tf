@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket         = "state-bucket-vast"
+    key            = "state/terraform.tfstate"
+    region         = "us-east-1"
+  }
+}
+
 #config lambda hello_terraform: zip e module
 data "archive_file" "hello_terraform" {
   type        = "zip"
@@ -90,8 +98,6 @@ module "delete_item" {
   }
 }
 
-
-
 module "cognito" {
   source = "./modules/cognito"
 
@@ -100,7 +106,6 @@ module "cognito" {
   enable_user_pool_domain = true
   user_pool_domain        = "market-auth"
 }
-
 
 module "api_gateway" {
   source = "./modules/api_gateway"
