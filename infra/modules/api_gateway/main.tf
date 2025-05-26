@@ -59,7 +59,6 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     ]))
   }
 
-
   lifecycle {
     create_before_destroy = true
   }
@@ -75,11 +74,3 @@ resource "aws_api_gateway_stage" "api_stage" {
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
   deployment_id = aws_api_gateway_deployment.api_deployment.id
 }
-
-
-
-
-
-
-
-
