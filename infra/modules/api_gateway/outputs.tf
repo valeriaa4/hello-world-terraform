@@ -3,5 +3,5 @@ output "invoke_url" {
 }
 
 output "invoke_arn" {
-  value = var.invoke_arn  
+  value = var.invoke_arn
 }
