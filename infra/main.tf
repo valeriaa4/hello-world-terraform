@@ -106,7 +106,7 @@ module "cognito" {
   user_pool_name          = "market-user-pool"
   user_pool_client_name   = "market-client"
   enable_user_pool_domain = true
-  user_pool_domain        = "market-auth"
+  user_pool_domain        = "market-auth-domain"
 }
 
 module "api_gateway" {
