@@ -9,10 +9,7 @@ TABLE = dynamodb.Table("MARKET_LIST")
 
 def lambda_handler(event, context):
 
-    print(json.dumps(event))
     try:
-
-        print("EVENT:", json.dumps(event))
 
         authorizer = event.get("requestContext", {}).get("authorizer", {})
         claims = authorizer.get("claims") or authorizer.get("jwt", {}).get("claims")
