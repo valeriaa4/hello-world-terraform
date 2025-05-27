@@ -54,11 +54,16 @@ variable "value_path" {
   default     = "hello"
 }
 
-
 variable "region" {
   description = "Região AWS"
   type        = string
   default     = "us-east-1"
+}
+
+variable "post_http_method" {
+  description = "Métodos HTTP"
+  type        = string
+  default     = "POST"
 }
 
 

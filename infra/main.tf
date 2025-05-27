@@ -43,7 +43,7 @@ data "archive_file" "create_item" {
 
 module "create_item" {
   source           = "./modules/lambda"
-  function_name    = "create-item"
+  function_name    = "create_item"
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
@@ -115,8 +115,9 @@ module "api_gateway" {
   http_method           = var.http_method
   value_path            = var.value_path
   invoke_arn            = module.hello_terraform.invoke_arn
+  post_http_method      = var.post_http_method
+  post_lambda_arn       = module.create_item.aws_lambda_function_arn
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
-
 

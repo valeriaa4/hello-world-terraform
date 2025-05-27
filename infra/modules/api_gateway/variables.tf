@@ -27,3 +27,19 @@ variable "cognito_user_pool_arn" {
   type        = string
 }
 
+variable "post_http_method" {
+  description = "Métodos HTTP"
+  type        = string
+}
+
+variable "post_lambda_arn" {
+  type        = string
+}
+
+variable "post_value_path" {
+  description = "post_value_path"
+  type        = string
+  default     = "create"
+}
+
+
