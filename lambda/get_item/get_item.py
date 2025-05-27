@@ -11,7 +11,6 @@ def lambda_handler(event, context):
         list_id = body.get('listId')
         item_id = body.get('itemId')
         
-        # Validação (igual à UPDATE)
         if not list_id or not item_id:
             return {
                 'statusCode': 400,
@@ -21,7 +20,7 @@ def lambda_handler(event, context):
         pk = f"LIST#{list_id}"
         sk = f"ITEM#{item_id}"
         
-        # Busca o item (equivalente ao get_item da UPDATE)
+        # Busca o item
         response = TABLE.get_item(Key={'PK': pk, 'SK': sk})
         item = response.get('Item')
         
@@ -31,7 +30,7 @@ def lambda_handler(event, context):
                 'body': json.dumps({'message': 'Item não encontrado'})
             }
         
-        # Formata a resposta (mesmo padrão da UPDATE)
+        # Formata a resposta 
         return {
             'statusCode': 200,
             'body': json.dumps({

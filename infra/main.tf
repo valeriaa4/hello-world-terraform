@@ -31,7 +31,7 @@ module "hello_terraform" {
 # config lambda get_item: zip e module
 data "archive_file" "get_itens" {
   type        = "zip"
-  source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
+  source_file = "../lambda/get_item/get_item.py"
   output_path = "${path.module}/zip/get_item.zip"
 }
 
@@ -136,7 +136,7 @@ locals {
   gateway_lambda_config = {
     get_item = {
       lambda_arn  = module.get_item.lambda_function_arn
-      lambda_name = module.get_item.function_name  # Corrigido de get_itens para get_item
+      lambda_name = module.get_item.function_name
       path        = "lista-tarefa"
       http_method = "GET"
     },
