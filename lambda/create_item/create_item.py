@@ -3,7 +3,10 @@ import boto3
 from datetime import datetime
 from uuid import uuid4
 
-dynamodb = boto3.resource("dynamodb")
+import boto3
+
+dynamodb = boto3.resource("dynamodb", region_name="us-east-1") 
+
 TABLE = dynamodb.Table("MARKET_LIST")
 
 

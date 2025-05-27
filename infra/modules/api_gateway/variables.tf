@@ -42,4 +42,18 @@ variable "post_value_path" {
   default     = "create"
 }
 
+variable "get_http_method" {
+  default = "GET"
+}
+
+variable "get_value_path" {
+  default = "get"
+}
+
+variable "get_lambda_arn" {
+  type = string
+}
+variable "get_function_name" {
+  type = string
+}
 

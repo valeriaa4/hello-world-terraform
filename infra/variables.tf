@@ -67,6 +67,16 @@ variable "post_http_method" {
 }
 
 
+variable "gateway_lambda_config" {
+  description = "Configurações para criar múltiplos caminhos/métodos para o API Gateway"
+  type = map(object({
+    path        = string
+    http_method = string
+    lambda_arn  = string
+    lambda_name = string
+  }))
+  default = {} # Isso evita que fique null por padrão
+}
 
 
 

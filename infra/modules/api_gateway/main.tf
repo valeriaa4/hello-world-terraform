@@ -17,12 +17,14 @@ resource "aws_api_gateway_authorizer" "apigw_authorizer" {
   identity_source = "method.request.header.Authorization"
 }
 
+# Criando o recurso (endpoint) da API
 resource "aws_api_gateway_resource" "api_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
   path_part   = var.value_path
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
+# Criando o método HTTP (exemplo: POST)
 resource "aws_api_gateway_method" "api_method" {
   resource_id   = aws_api_gateway_resource.api_resource.id
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
@@ -31,6 +33,7 @@ resource "aws_api_gateway_method" "api_method" {
   authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
 
+# Integração com Lambda (exemplo: POST)
 resource "aws_api_gateway_integration" "lambda_integration" {
   http_method             = aws_api_gateway_method.api_method.http_method
   resource_id             = aws_api_gateway_resource.api_resource.id
@@ -46,6 +49,13 @@ resource "aws_lambda_permission" "apigw_lambda_permission" {
   function_name = var.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
+}
+
+# Recurso e método POST adicional (caso necessário)
+resource "aws_api_gateway_resource" "post_api_resource" {
+  parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
+  path_part   = var.post_value_path
+  rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
 resource "aws_api_gateway_method" "add_item_api_method" {
@@ -73,10 +83,30 @@ resource "aws_lambda_permission" "add_item_permission" {
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }
 
-resource "aws_api_gateway_resource" "post_api_resource" {
-  parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
-  path_part   = var.post_value_path
-  rest_api_id = aws_api_gateway_rest_api.create_api.id
+# Método GET (exemplo)
+resource "aws_api_gateway_method" "get_item_api_method" {
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  rest_api_id   = aws_api_gateway_rest_api.create_api.id
+  http_method   = var.get_http_method
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+}
+
+resource "aws_api_gateway_integration" "get_item_integration" {
+  http_method             = aws_api_gateway_method.get_item_api_method.http_method
+  resource_id             = aws_api_gateway_resource.api_resource.id
+  rest_api_id             = aws_api_gateway_rest_api.create_api.id
+  integration_http_method = "GET"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
+}
+
+resource "aws_lambda_permission" "get_item_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway-GET-${var.get_value_path}"
+  action        = "lambda:InvokeFunction"
+  function_name = var.get_function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*"
 }
 
 #Estagio de implantação da api
@@ -104,6 +134,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   ]
 }
 
+# Definindo o estágio da API
 resource "aws_api_gateway_stage" "api_stage" {
   stage_name    = "dev"
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
