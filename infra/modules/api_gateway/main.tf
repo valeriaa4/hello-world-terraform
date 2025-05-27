@@ -10,10 +10,10 @@ resource "aws_api_gateway_rest_api" "create_api" {
 
 #Recurso de autorização api gateway
 resource "aws_api_gateway_authorizer" "apigw_authorizer" {
-  name          = "apigw_authorizer"
-  rest_api_id   = aws_api_gateway_rest_api.create_api.id
-  type          = "COGNITO_USER_POOLS"
-  provider_arns = [var.cognito_user_pool_arn]
+  name            = "apigw_authorizer"
+  rest_api_id     = aws_api_gateway_rest_api.create_api.id
+  type            = "COGNITO_USER_POOLS"
+  provider_arns   = [var.cognito_user_pool_arn]
   identity_source = "method.request.header.Authorization"
 }
 
@@ -56,7 +56,7 @@ resource "aws_api_gateway_method" "add_item_api_method" {
   authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
 
-resource "aws_api_gateway_integration" "add_item_integration" { 
+resource "aws_api_gateway_integration" "add_item_integration" {
   http_method             = aws_api_gateway_method.add_item_api_method.http_method
   resource_id             = aws_api_gateway_resource.post_api_resource.id
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
@@ -65,7 +65,7 @@ resource "aws_api_gateway_integration" "add_item_integration" {
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
 }
 
-resource "aws_lambda_permission" "add_item_permission" { 
+resource "aws_lambda_permission" "add_item_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = "create_item"
@@ -73,7 +73,7 @@ resource "aws_lambda_permission" "add_item_permission" {
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }
 
-resource "aws_api_gateway_resource" "post_api_resource" { 
+resource "aws_api_gateway_resource" "post_api_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
   path_part   = var.post_value_path
   rest_api_id = aws_api_gateway_rest_api.create_api.id

@@ -33,7 +33,7 @@ variable "post_http_method" {
 }
 
 variable "post_lambda_arn" {
-  type        = string
+  type = string
 }
 
 variable "post_value_path" {

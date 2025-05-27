@@ -27,7 +27,7 @@ resource "aws_cognito_user_pool_client" "this" {
   generate_secret = false
 
   allowed_oauth_flows_user_pool_client = true
-  prevent_user_existence_errors = "ENABLED"
+  prevent_user_existence_errors        = "ENABLED"
   explicit_auth_flows = [
     "ALLOW_USER_PASSWORD_AUTH",
     "ALLOW_REFRESH_TOKEN_AUTH",
@@ -35,11 +35,11 @@ resource "aws_cognito_user_pool_client" "this" {
     "ALLOW_CUSTOM_AUTH"
   ]
 
-  allowed_oauth_flows = ["code", "implicit"] 
-  allowed_oauth_scopes = ["email", "openid", "profile"] 
-  
+  allowed_oauth_flows  = ["code", "implicit"]
+  allowed_oauth_scopes = ["email", "openid", "profile"]
+
   callback_urls = ["http://localhost:8080/callback"]
-  
+
 }
 
 # (Opcional) Hosted UI domain
