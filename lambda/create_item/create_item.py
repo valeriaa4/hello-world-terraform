@@ -6,11 +6,10 @@ from datetime import datetime
 from uuid import uuid4
 
 TABLE_NAME = os.environ.get('TABLE_NAME', 'MARKET_LIST')
-AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
-dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION) 
 
+# Inicializa o cliente DynamoDB com a região correta
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 TABLE = dynamodb.Table(TABLE_NAME)
-
 
 def lambda_handler(event, context):
 

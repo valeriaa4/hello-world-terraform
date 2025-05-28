@@ -33,7 +33,6 @@ resource "aws_lambda_function" "lambda" {
       TABLE_NAME  = var.table_name
       HTTP_METHOD = var.http_method
       value_path  = var.value_path
-      AWS_REGION  = var.aws_region
     }
   }
 }
