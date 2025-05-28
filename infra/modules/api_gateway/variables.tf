@@ -59,9 +59,6 @@ variable "get_value_path" {
   default = "get"
 }
 
-variable "get_lambda_arn" {
-  type = string
-}
 variable "get_function_name" {
   type = string
 }
