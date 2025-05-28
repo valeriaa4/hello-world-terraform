@@ -144,7 +144,7 @@ module "api_gateway" {
 
   # Configuração específica do HELLO
   hello_http_method   = var.hello_http_method
-  hello_lambda_arn    = module.hello_terraform.invoke_arn
+  hello_lambda_arn = module.hello_terraform.arn
   hello_function_name = module.hello_terraform.function_name
 
   # Configuração específica do GET
