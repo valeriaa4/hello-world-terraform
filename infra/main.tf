@@ -142,6 +142,11 @@ module "api_gateway" {
   function_name = module.get_itens.function_name
   invoke_arn    = module.get_itens.invoke_arn
 
+ # Configuração específica do HELLO
+  hello_http_method   = var.hello_http_method
+  hello_lambda_arn    = module.hello_terraform.invoke_arn
+  hello_function_name = module.hello_terraform.function_name
+
   # Configuração específica do GET
   get_http_method   = var.get_http_method
   get_lambda_arn    = module.get_itens.invoke_arn

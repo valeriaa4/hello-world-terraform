@@ -54,6 +54,12 @@ variable "hello_value_path" {
   default     = "hello"
 }
 
+variable "hello_http_method" {
+   description = "Métodos HTTP"
+   type        = string
+   default     = "GET"
+}
+
 variable "post_get_value_path" {
   description = "value_path"
   type        = string
@@ -90,6 +96,7 @@ variable "gateway_lambda_config" {
 
 
 
-
-
-
+variable "hello_function_name" {
+  type = string
+  default = "hello_function_name"
+}

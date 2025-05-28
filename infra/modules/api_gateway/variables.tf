@@ -22,6 +22,10 @@ variable "function_name" {
   type = string
 }
 
+variable "hello_function_name" {
+  type = string
+}
+
 variable "cognito_user_pool_arn" {
   description = "ARN do User Pool do Cognito"
   type        = string
@@ -52,6 +56,10 @@ variable "post_value_path" {
 }
 
 variable "get_http_method" {
+  default = "GET"
+}
+
+variable "hello_http_method" {
   default = "GET"
 }
 
