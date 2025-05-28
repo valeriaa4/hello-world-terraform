@@ -3,7 +3,7 @@ import os
 import json
 from unittest.mock import patch
 
-os.environ["NOME_TABELA"] = "test_table"
+os.environ["DYNAMODB_TABLE_NAME"] = "test_table"
 
 
 @pytest.fixture
