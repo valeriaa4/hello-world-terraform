@@ -37,14 +37,14 @@ module "dynamodb" {
 #config lambda create_item: zip e module
 data "archive_file" "create_item" {
   type        = "zip"
-  source_file = "../lambda/create_item/lambda.py"
+  source_file = "../lambda/create_item/create_item.py"
   output_path = "${path.module}/zip/create_item.zip"
 }
 
 module "create_item" {
   source           = "./modules/lambda"
   function_name    = "create-item"
-  handler          = "lambda.lambda_handler"
+  handler          = "create_item.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
   timeout          = var.timeout
