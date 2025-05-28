@@ -150,7 +150,7 @@ module "api_gateway" {
   get_function_name = module.get_itens.function_name
 
   # Configuração do POST
-  post_http_method   = "POST"
-  post_lambda_arn    = module.create_item.invoke_arn
-  post_value_path    = "lista-tarefa"
+  post_http_method = "POST"
+  post_lambda_arn  = module.create_item.invoke_arn
+  post_value_path  = "lista-tarefa"
 }

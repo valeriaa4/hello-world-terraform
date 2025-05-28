@@ -75,7 +75,7 @@ variable "gateway_lambda_config" {
     lambda_arn  = string
     lambda_name = string
   }))
-  default = {} 
+  default = {}
 }
 
 
