@@ -53,8 +53,9 @@ resource "aws_lambda_permission" "hello_permission" {
   action        = "lambda:InvokeFunction"
   function_name = var.hello_function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/${aws_api_gateway_stage.api_stage.stage_name}/${var.hello_http_method}/hello"
 }
+
 
 # Criando o método HTTP (exemplo: POST)
 resource "aws_api_gateway_method" "api_method" {

@@ -80,9 +80,6 @@ variable "post_http_method" {
   default     = "POST"
 }
 
-
-
-
 variable "gateway_lambda_config" {
   description = "Configurações para criar múltiplos caminhos/métodos para o API Gateway"
   type = map(object({
@@ -92,11 +89,4 @@ variable "gateway_lambda_config" {
     lambda_name = string
   }))
   default = {}
-}
-
-
-
-variable "hello_function_name" {
-  type    = string
-  default = "hello_function_name"
 }

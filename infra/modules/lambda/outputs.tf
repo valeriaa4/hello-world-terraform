@@ -3,13 +3,5 @@ output "function_name" {
 }
 
 output "invoke_arn" {
-  value = aws_lambda_function.lambda_function.invoke_arn
-}
-
-output "aws_lambda_function_arn" {
-  value = aws_lambda_function.lambda.arn
-}
-
-output "arn" {
-  value = aws_lambda_function.this.arn
+  value = aws_lambda_function.lambda.invoke_arn
 }
