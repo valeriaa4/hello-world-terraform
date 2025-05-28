@@ -60,7 +60,7 @@ module "dynamodb" {
 #config lambda create_item: zip e module
 data "archive_file" "create_item" {
   type        = "zip"
-  source_file = "../lambda/create_item/lambda.py"
+  source_file = "../lambda/create_item/create_item.py"
   output_path = "${path.module}/zip/create_item.zip"
 }
 
@@ -132,43 +132,25 @@ module "cognito" {
   user_pool_domain        = "market-auth-domain"
 }
 
-locals {
-  gateway_lambda_config = {
-    get_item = {
-      lambda_arn  = module.get_item.lambda_function_arn
-      lambda_name = module.get_item.function_name
-      path        = "lista-tarefa"
-      http_method = "GET"
-    },
-
-    post_item = {
-      lambda_arn  = module.create_item.lambda_function_arn
-      lambda_name = module.create_item.function_name
-      path        = "lista-tarefa"
-      http_method = "POST"
-    }
-  }
-}
-
-
-
 module "api_gateway" {
-  source   = "./modules/apigateway"
-  for_each = local.gateway_lambda_config
+  source = "./modules/api_gateway"
 
   region                = var.region
-  value_path            = each.value.path
-  http_method           = each.value.http_method
-  invoke_arn            = each.value.lambda_arn
-  function_name         = each.value.lambda_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
 
-  post_http_method = "POST"
-  post_lambda_arn  = each.value.lambda_arn
-  post_value_path  = "create"
+  # Configuração base (pode ser para o GET principal)
+  value_path    = "lista-tarefa"
+  http_method   = "GET"
+  function_name = module.get_itens.function_name
+  invoke_arn    = module.get_itens.invoke_arn
 
+  # Configuração específica do GET
   get_http_method   = "GET"
-  get_lambda_arn    = each.value.lambda_arn
-  get_function_name = each.value.lambda_name
-  get_value_path    = "get"
+  get_lambda_arn    = module.get_itens.invoke_arn
+  get_function_name = module.get_itens.function_name
+
+  # Configuração do POST
+  post_http_method   = "POST"
+  post_lambda_arn    = module.create_item.invoke_arn
+  post_value_path    = "lista-tarefa"
 }
