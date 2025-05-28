@@ -119,9 +119,9 @@ module "api_gateway" {
   post_lambda_arn       = module.create_item.aws_lambda_function_arn
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
-  patch_http_method    = "PATCH"
-  patch_value_path     = "lista-tarefa/{item_id}"
-  patch_lambda_arn     = module.update_item.aws_lambda_function_arn
+  patch_http_method     = "PATCH"
+  patch_value_path      = "lista-tarefa/{item_id}"
+  patch_lambda_arn      = module.update_item.aws_lambda_function_arn
 
 }
 

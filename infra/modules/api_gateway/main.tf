@@ -84,18 +84,18 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 
   triggers = {
-  redeployment = sha1(jsonencode([
-    aws_api_gateway_resource.api_resource.id,
-    aws_api_gateway_method.api_method.id,
-    aws_api_gateway_integration.lambda_integration.id,
-    aws_api_gateway_method.add_item_api_method.id,
-    aws_api_gateway_integration.add_item_integration.id,
-    aws_api_gateway_resource.post_api_resource.id,
-    aws_api_gateway_resource.patch_item_resource.id,
-    aws_api_gateway_method.patch_item_method.id,
-    aws_api_gateway_integration.patch_item_integration.id
-  ]))
-}
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.api_resource.id,
+      aws_api_gateway_method.api_method.id,
+      aws_api_gateway_integration.lambda_integration.id,
+      aws_api_gateway_method.add_item_api_method.id,
+      aws_api_gateway_integration.add_item_integration.id,
+      aws_api_gateway_resource.post_api_resource.id,
+      aws_api_gateway_resource.patch_item_resource.id,
+      aws_api_gateway_method.patch_item_method.id,
+      aws_api_gateway_integration.patch_item_integration.id
+    ]))
+  }
 
 
   lifecycle {
@@ -103,11 +103,11 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   }
 
   depends_on = [
-  aws_api_gateway_integration.lambda_integration,
-  aws_lambda_permission.apigw_lambda_permission,
-  aws_api_gateway_integration.patch_item_integration,
-  aws_lambda_permission.patch_item_permission
-]
+    aws_api_gateway_integration.lambda_integration,
+    aws_lambda_permission.apigw_lambda_permission,
+    aws_api_gateway_integration.patch_item_integration,
+    aws_lambda_permission.patch_item_permission
+  ]
 }
 
 resource "aws_api_gateway_stage" "api_stage" {
@@ -132,7 +132,7 @@ resource "aws_api_gateway_resource" "patch_item_resource" {
 resource "aws_api_gateway_method" "patch_item_method" {
   resource_id   = aws_api_gateway_resource.patch_item_resource.id
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
-  http_method   = var.patch_http_method  
+  http_method   = var.patch_http_method
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
@@ -141,7 +141,7 @@ resource "aws_api_gateway_integration" "patch_item_integration" {
   http_method             = aws_api_gateway_method.patch_item_method.http_method
   resource_id             = aws_api_gateway_resource.patch_item_resource.id
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
-  integration_http_method = "POST" 
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
 }
