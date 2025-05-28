@@ -18,8 +18,8 @@ data "archive_file" "hello_terraform" {
 module "hello_terraform" {
   source           = "./modules/lambda"
   function_name    = "hello-terraform"
-  value_path       = "hello"
-  http_method      = "GET"
+  value_path       = var.hello_value_path
+  http_method      = var.get_http_method
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
@@ -44,17 +44,16 @@ module "get_itens" {
   timeout          = var.timeout
   filename         = data.archive_file.get_itens.output_path
   source_code_hash = data.archive_file.get_itens.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
 }
-
 
 #config dynamodb
 module "dynamodb" {
   source     = "./modules/dynamodb"
-  table_name = "MARKET_LIST"
+  table_name = var.table_name
 }
 
 #config lambda create_item: zip e module
@@ -73,9 +72,9 @@ module "create_item" {
   timeout          = var.timeout
   filename         = data.archive_file.create_item.output_path
   source_code_hash = data.archive_file.create_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
 }
 
@@ -95,9 +94,9 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
 }
 
@@ -117,9 +116,9 @@ module "delete_item" {
   timeout          = var.timeout
   filename         = data.archive_file.delete_item.output_path
   source_code_hash = data.archive_file.delete_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
 }
 
@@ -138,19 +137,19 @@ module "api_gateway" {
   region                = var.region
   cognito_user_pool_arn = module.cognito.user_pool_arn
 
-  # Configuração base (pode ser para o GET principal)
-  value_path    = "lista-tarefa"
-  http_method   = "GET"
+  # Configuração base 
+  value_path    = var.post_get_value_path
+  http_method   = var.get_http_method
   function_name = module.get_itens.function_name
   invoke_arn    = module.get_itens.invoke_arn
 
   # Configuração específica do GET
-  get_http_method   = "GET"
+  get_http_method   = var.get_http_method
   get_lambda_arn    = module.get_itens.invoke_arn
   get_function_name = module.get_itens.function_name
 
   # Configuração do POST
-  post_http_method = "POST"
+  post_http_method = var.post_http_method
   post_lambda_arn  = module.create_item.invoke_arn
-  post_value_path  = "lista-tarefa"
+  post_value_path  = var.post_get_value_path
 }

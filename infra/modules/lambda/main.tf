@@ -28,14 +28,12 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = filebase64sha256(var.filename)
   memory_size      = var.memory_size
   timeout          = var.timeout
-  dynamic "environment" {
-    for_each = var.table_name != null ? [1] : []
-    content {
-      variables = {
-        TABLE_NAME  = var.table_name
-        HTTP_METHOD = var.http_method
-        value_path  = var.value_path
-      }
+  environment {
+    variables = {
+      TABLE_NAME  = var.table_name
+      HTTP_METHOD = var.http_method
+      value_path  = var.value_path
+      AWS_REGION  = var.aws_region
     }
   }
 }

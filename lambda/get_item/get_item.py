@@ -1,12 +1,17 @@
 import json
 import boto3
+import os
 
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-TABLE = dynamodb.Table('MARKET_LIST')
+TABLE_NAME = os.environ.get('TABLE_NAME', 'MARKET_LIST')
+AWS_REGION = os.environ.get('AWS_REGION', 'us-east-1')
+
+# Inicializa o cliente DynamoDB com a região correta
+dynamodb = boto3.resource('dynamodb', region_name=AWS_REGION)
+TABLE = dynamodb.Table(TABLE_NAME)
 
 def lambda_handler(event, context):
     try:
-        # Parse do body (mesmo padrão da UPDATE)
+        # Parse do body 
         body = json.loads(event.get('body', '{}'))
         list_id = body.get('listId')
         item_id = body.get('itemId')

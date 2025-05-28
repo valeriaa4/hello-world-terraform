@@ -16,7 +16,7 @@ variable "timeout" {
 variable "table_name" {
   description = "Nome da tabela DynamoDB"
   type        = string
-  default     = null
+  default     = "MARKET_LIST"
 }
 
 
@@ -42,16 +42,22 @@ variable "user_pool_domain" {
 
 
 # NOVAS VARIÁVEIS PARA API GATEWAY
-variable "http_method" {
+variable "get_http_method" {
   description = "Métodos HTTP"
   type        = string
   default     = "GET"
 }
 
-variable "value_path" {
+variable "hello_value_path" {
   description = "value_path"
   type        = string
   default     = "hello"
+}
+
+variable "post_get_value_path" {
+  description = "value_path"
+  type        = string
+  default     = "lista-tarefa"
 }
 
 variable "region" {
@@ -60,11 +66,15 @@ variable "region" {
   default     = "us-east-1"
 }
 
+
+
 variable "post_http_method" {
   description = "Métodos HTTP"
   type        = string
   default     = "POST"
 }
+
+
 
 
 variable "gateway_lambda_config" {
