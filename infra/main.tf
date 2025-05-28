@@ -28,6 +28,12 @@ module "hello_terraform" {
   source_code_hash = data.archive_file.hello_terraform.output_base64sha256
 }
 
+#config dynamodb
+module "dynamodb" {
+  source     = "./modules/dynamodb"
+  table_name = var.table_name
+}
+
 # config lambda get_item: zip e module
 data "archive_file" "get_itens" {
   type        = "zip"
@@ -49,13 +55,6 @@ module "get_itens" {
     TABLE_NAME = var.table_name
   }
 }
-
-#config dynamodb
-module "dynamodb" {
-  source     = "./modules/dynamodb"
-  table_name = var.table_name
-}
-
 #config lambda create_item: zip e module
 data "archive_file" "create_item" {
   type        = "zip"
