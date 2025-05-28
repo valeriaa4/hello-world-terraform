@@ -51,7 +51,7 @@ resource "aws_api_gateway_integration" "hello_integration" {
 resource "aws_lambda_permission" "hello_permission" {
   statement_id  = "AllowExecutionFromAPIGateway-Hello"
   action        = "lambda:InvokeFunction"
-  function_name = var. hello_function_name
+  function_name = var.hello_function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*"
 }
