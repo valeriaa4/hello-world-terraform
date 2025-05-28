@@ -66,8 +66,8 @@ data "archive_file" "create_item" {
 
 module "create_item" {
   source           = "./modules/lambda"
-  function_name    = "create_item"
-  handler          = "lambda.lambda_handler"
+  function_name    = "create-item"
+  handler          = "create_item.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
   timeout          = var.timeout
