@@ -157,4 +157,11 @@ module "api_gateway" {
   post_http_method = var.post_http_method
   post_lambda_arn  = module.create_item.invoke_arn
   post_value_path  = var.post_get_value_path
+
+  depends_on = [
+    module.hello_terraform,
+    module.get_itens,
+    module.create_item,
+    module.dynamodb
+  ]
 }
