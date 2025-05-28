@@ -27,6 +27,15 @@ variable "cognito_user_pool_arn" {
   type        = string
 }
 
+variable "hello_lambda_arn" {
+  type = string
+}
+
+
+variable "get_lambda_arn" {
+  type = string
+}
+
 variable "post_http_method" {
   description = "Métodos HTTP"
   type        = string

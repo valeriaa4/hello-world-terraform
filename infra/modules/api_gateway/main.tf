@@ -24,6 +24,38 @@ resource "aws_api_gateway_resource" "api_resource" {
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
+# Método HELLO (exemplo)
+resource "aws_api_gateway_resource" "hello_resource" {
+  parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
+  path_part   = "hello"
+  rest_api_id = aws_api_gateway_rest_api.create_api.id
+}
+
+resource "aws_api_gateway_method" "hello_method" {
+  resource_id   = aws_api_gateway_resource.hello_resource.id
+  rest_api_id   = aws_api_gateway_rest_api.create_api.id
+  http_method   = "GET"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+}
+
+resource "aws_api_gateway_integration" "hello_integration" {
+  http_method             = aws_api_gateway_method.hello_method.http_method
+  resource_id             = aws_api_gateway_resource.hello_resource.id
+  rest_api_id             = aws_api_gateway_rest_api.create_api.id
+  integration_http_method = "GET"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.hello_lambda_arn}/invocations"
+}
+
+resource "aws_lambda_permission" "hello_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway-Hello"
+  action        = "lambda:InvokeFunction"
+  function_name = var.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*"
+}
+
 # Criando o método HTTP (exemplo: POST)
 resource "aws_api_gateway_method" "api_method" {
   resource_id   = aws_api_gateway_resource.api_resource.id
