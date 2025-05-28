@@ -17,7 +17,7 @@ data "archive_file" "hello_terraform" {
 
 module "hello_terraform" {
   source           = "./modules/lambda"
-  function_name    = "hello-terraform"
+  function_name    = "hello_terraform"
   value_path       = var.hello_value_path
   http_method      = var.get_http_method
   handler          = "lambda.lambda_handler"
