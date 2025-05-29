@@ -19,7 +19,7 @@ resource "aws_api_gateway_authorizer" "apigw_authorizer" {
 
 # Recurso GET 
 resource "aws_api_gateway_resource" "get_item_resource" {
-  parent_id   = aws_api_gateway_resource.patch_api_resource.id
+  parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
   path_part   = var.value_path
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
