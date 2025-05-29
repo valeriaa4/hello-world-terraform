@@ -147,4 +147,12 @@ module "api_gateway" {
   patch_value_path      = "lista-tarefa/{item_id}"
   patch_lambda_arn      = module.update_item.invoke_arn
 
+  depends_on = [
+    module.get_item,
+    module.create_item,
+    module.update_item,
+    module.dynamodb,
+    module.cognito
+  ]
+
 }
