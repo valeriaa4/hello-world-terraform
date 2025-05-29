@@ -15,18 +15,18 @@ data "archive_file" "hello_terraform" {
   output_path = "${path.module}/zip/hello_terraform.zip"
 }
 
-# module "hello_terraform" {
-#   source           = "./modules/lambda"
-#   function_name    = "hello-terraform"
-#   value_path       = "hello"
-#   http_method      = var.http_method
-#   handler          = "lambda.lambda_handler"
-#   runtime          = var.runtime
-#   memory_size      = var.memory_size
-#   timeout          = var.timeout
-#   filename         = data.archive_file.hello_terraform.output_path
-#   source_code_hash = data.archive_file.hello_terraform.output_base64sha256
-# }
+module "hello_terraform" {
+  source           = "./modules/lambda"
+  function_name    = "hello-terraform"
+  value_path       = "hello"
+  http_method      = var.http_method
+  handler          = "lambda.lambda_handler"
+  runtime          = var.runtime
+  memory_size      = var.memory_size
+  timeout          = var.timeout
+  filename         = data.archive_file.hello_terraform.output_path
+  source_code_hash = data.archive_file.hello_terraform.output_base64sha256
+}
 
 # # config dynamodb
 # module "dynamodb" {

@@ -1,51 +1,51 @@
-# resource "aws_cognito_user_pool" "this" {
-#   name = var.user_pool_name
+resource "aws_cognito_user_pool" "this" {
+  name = var.user_pool_name
 
-#   username_attributes = ["email"]
+  username_attributes = ["email"]
 
-#   auto_verified_attributes = ["email"]
+  auto_verified_attributes = ["email"]
 
-#   password_policy {
-#     minimum_length    = 8
-#     require_uppercase = true
-#     require_lowercase = true
-#     require_numbers   = true
-#     require_symbols   = false
-#   }
+  password_policy {
+    minimum_length    = 8
+    require_uppercase = true
+    require_lowercase = true
+    require_numbers   = true
+    require_symbols   = false
+  }
 
-#   account_recovery_setting {
-#     recovery_mechanism {
-#       name     = "verified_email"
-#       priority = 1
-#     }
-#   }
-# }
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+  }
+}
 
-# resource "aws_cognito_user_pool_client" "this" {
-#   name            = var.user_pool_client_name
-#   user_pool_id    = aws_cognito_user_pool.this.id
-#   generate_secret = false
+resource "aws_cognito_user_pool_client" "this" {
+  name            = var.user_pool_client_name
+  user_pool_id    = aws_cognito_user_pool.this.id
+  generate_secret = false
 
-#   allowed_oauth_flows_user_pool_client = true
-#   prevent_user_existence_errors        = "ENABLED"
-#   explicit_auth_flows = [
-#     "ALLOW_USER_PASSWORD_AUTH",
-#     "ALLOW_REFRESH_TOKEN_AUTH",
-#     "ALLOW_USER_SRP_AUTH",
-#     "ALLOW_CUSTOM_AUTH"
-#   ]
+  allowed_oauth_flows_user_pool_client = true
+  prevent_user_existence_errors        = "ENABLED"
+  explicit_auth_flows = [
+    "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_SRP_AUTH",
+    "ALLOW_CUSTOM_AUTH"
+  ]
 
-#   allowed_oauth_flows  = ["code", "implicit"]
-#   allowed_oauth_scopes = ["email", "openid", "profile"]
+  allowed_oauth_flows  = ["code", "implicit"]
+  allowed_oauth_scopes = ["email", "openid", "profile"]
 
-#   callback_urls = ["http://localhost:8080/callback"]
+  callback_urls = ["http://localhost:8080/callback"]
 
-# }
+}
 
-# # (Opcional) Hosted UI domain
-# resource "aws_cognito_user_pool_domain" "this" {
-#   count = var.enable_user_pool_domain ? 1 : 0
+# (Opcional) Hosted UI domain
+resource "aws_cognito_user_pool_domain" "this" {
+  count = var.enable_user_pool_domain ? 1 : 0
 
-#   domain       = var.user_pool_domain
-#   user_pool_id = aws_cognito_user_pool.this.id
-# }
+  domain       = var.user_pool_domain
+  user_pool_id = aws_cognito_user_pool.this.id
+}
