@@ -29,10 +29,10 @@ module "hello_terraform" {
 }
 
 # config dynamodb
-# module "dynamodb" {
-#   source     = "./modules/dynamodb"
-#   table_name = var.table_name
-# }
+module "dynamodb" {
+  source     = "./modules/dynamodb"
+  table_name = var.table_name
+}
 
 # config lambda get_item: zip e module
 data "archive_file" "get_item" {
