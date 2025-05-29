@@ -38,7 +38,9 @@ resource "aws_api_gateway_integration" "get_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
+  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
+  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
+
 }
 
 resource "aws_lambda_permission" "get_item_permission" {
@@ -75,7 +77,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
 resource "aws_lambda_permission" "apigw_lambda_permission" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = "lista-tarefa"
+  function_name = var.lambda_function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }
@@ -94,7 +96,9 @@ resource "aws_api_gateway_integration" "add_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
+  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
+  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
+
 }
 
 resource "aws_lambda_permission" "add_item_permission" {
@@ -179,7 +183,9 @@ resource "aws_api_gateway_integration" "patch_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
+  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
+  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
+
 }
 
 resource "aws_lambda_permission" "patch_item_permission" {
