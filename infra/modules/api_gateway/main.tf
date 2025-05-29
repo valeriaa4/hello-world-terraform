@@ -20,7 +20,7 @@ resource "aws_api_gateway_authorizer" "apigw_authorizer" {
 # Recurso GET 
 resource "aws_api_gateway_resource" "get_item_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
-  path_part   = var.value_path
+  path_part   = "lista-tarefa"
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
@@ -39,14 +39,16 @@ resource "aws_api_gateway_integration" "get_item_integration" {
   integration_http_method = var.get_http_method
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
+
 }
 
+data "aws_caller_identity" "current" {}
 resource "aws_lambda_permission" "get_item_permission" {
   statement_id  = "AllowExecutionFromAPIGatewayGet"
   action        = "lambda:InvokeFunction"
   function_name = "get_item"
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.create_api.id}/*/${var.get_http_method}/lista-tarefa"
 }
 
 resource "aws_api_gateway_resource" "api_resource" {
