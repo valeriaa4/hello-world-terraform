@@ -10,13 +10,8 @@ output "function_name" {
   value = module.hello_terraform.function_name
 }
 
-output "invoke_arn" {
-  value = module.hello_terraform.invoke_arn
-}
-
-output "invoke_url" {
-  value = module.api_gateway.invoke_url
-}
-
+# output "invoke_arn" {
+#   value = module.hello_terraform.invoke_arn
+# }
 
 

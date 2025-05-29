@@ -16,7 +16,7 @@ variable "timeout" {
 variable "table_name" {
   description = "Nome da tabela DynamoDB"
   type        = string
-  default     = null
+  default     = "MARKET_LIST"
 }
 
 
@@ -65,11 +65,4 @@ variable "post_http_method" {
   type        = string
   default     = "POST"
 }
-
-
-
-
-
-
-
 

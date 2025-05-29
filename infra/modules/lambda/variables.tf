@@ -36,7 +36,7 @@ variable "environment" {
 
 variable "table_name" {
   type    = string
-  default = null
+  default = "MARKET_LIST"
 }
 
 variable "http_method" {
@@ -55,4 +55,10 @@ variable "create_role" {
   type        = bool
   description = "Criar uma nova funcao"
   default     = true
+}
+
+variable "aws_region" {
+  description = "Região AWS onde o DynamoDB está"
+  type        = string
+  default     = "us-east-1"
 }

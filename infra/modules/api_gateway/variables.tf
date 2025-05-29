@@ -14,9 +14,9 @@ variable "value_path" {
   type        = string
 }
 
-variable "invoke_arn" {
-  type = string
-}
+# variable "invoke_arn" {
+#   type = string
+# }
 
 variable "function_name" {
   type = string
@@ -24,6 +24,15 @@ variable "function_name" {
 
 variable "cognito_user_pool_arn" {
   description = "ARN do User Pool do Cognito"
+  type        = string
+}
+
+variable "get_lambda_arn" {
+  type = string
+}
+
+variable "get_http_method" {
+  description = "Métodos HTTP"
   type        = string
 }
 
@@ -53,4 +62,9 @@ variable "patch_value_path" {
 
 variable "patch_lambda_arn" {
   type = string
+}
+
+variable "lambda_function_name" {
+  description = "Nome da função Lambda que será integrada com o API Gateway"
+  type        = string
 }

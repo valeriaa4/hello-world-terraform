@@ -8,7 +8,7 @@ terraform {
   }
 }
 
-#config lambda hello_terraform: zip e module
+# config lambda hello_terraform: zip e module
 data "archive_file" "hello_terraform" {
   type        = "zip"
   source_file = "../lambda/hello_terraform/lambda.py"
@@ -19,7 +19,7 @@ module "hello_terraform" {
   source           = "./modules/lambda"
   function_name    = "hello-terraform"
   value_path       = "hello"
-  http_method      = "GET"
+  http_method      = var.http_method
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
@@ -28,13 +28,36 @@ module "hello_terraform" {
   source_code_hash = data.archive_file.hello_terraform.output_base64sha256
 }
 
-#config dynamodb
+# config dynamodb
 module "dynamodb" {
   source     = "./modules/dynamodb"
-  table_name = "MARKET_LIST"
+  table_name = var.table_name
 }
 
-#config lambda create_item: zip e module
+# config lambda get_item: zip e module
+data "archive_file" "get_item" {
+  type        = "zip"
+  source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
+  output_path = "${path.module}/zip/get_itens.zip"
+}
+
+module "get_item" {
+  source           = "./modules/lambda"
+  function_name    = "get_item"
+  handler          = "get_item.lambda_handler"
+  runtime          = var.runtime
+  memory_size      = var.memory_size
+  timeout          = var.timeout
+  filename         = data.archive_file.get_item.output_path
+  source_code_hash = data.archive_file.get_item.output_base64sha256
+  table_name       = var.table_name
+  environment = {
+    TABLE_NAME = var.table_name
+  }
+  depends_on = [module.dynamodb]
+}
+
+# config lambda create_item: zip e module
 data "archive_file" "create_item" {
   type        = "zip"
   source_file = "../lambda/create_item/create_item.py"
@@ -50,10 +73,11 @@ module "create_item" {
   timeout          = var.timeout
   filename         = data.archive_file.create_item.output_path
   source_code_hash = data.archive_file.create_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
+  depends_on = [module.dynamodb]
 }
 
 #config lambda update_item: zip e module
@@ -72,10 +96,11 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
+  depends_on = [module.dynamodb]
 }
 
 #config lambda delete_item: zip e module
@@ -94,10 +119,11 @@ module "delete_item" {
   timeout          = var.timeout
   filename         = data.archive_file.delete_item.output_path
   source_code_hash = data.archive_file.delete_item.output_base64sha256
-  table_name       = "MARKET_LIST"
+  table_name       = var.table_name
   environment = {
-    TABLE_NAME = "MARKET_LIST"
+    TABLE_NAME = var.table_name
   }
+  depends_on = [module.dynamodb]
 }
 
 module "cognito" {
@@ -112,16 +138,27 @@ module "cognito" {
 module "api_gateway" {
   source = "./modules/api_gateway"
 
-  http_method           = var.http_method
-  value_path            = var.value_path
-  invoke_arn            = module.hello_terraform.invoke_arn
+  http_method = var.http_method
+  value_path  = var.value_path
+
+  get_http_method       = var.http_method
+  get_lambda_arn        = module.get_item.function_arn
   post_http_method      = var.post_http_method
-  post_lambda_arn       = module.create_item.aws_lambda_function_arn
+  post_lambda_arn       = module.create_item.function_arn
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
   patch_http_method     = "PATCH"
   patch_value_path      = "lista-tarefa/{item_id}"
-  patch_lambda_arn      = module.update_item.aws_lambda_function_arn
+  patch_lambda_arn      = module.update_item.invoke_arn
+  lambda_function_name  = module.hello_terraform.function_name
+
+
+  depends_on = [
+    module.get_item,
+    module.create_item,
+    module.update_item,
+    module.dynamodb,
+    module.cognito
+  ]
 
 }
-
