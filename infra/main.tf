@@ -28,7 +28,7 @@ module "hello_terraform" {
   source_code_hash = data.archive_file.hello_terraform.output_base64sha256
 }
 
-#config dynamodb
+# config dynamodb
 module "dynamodb" {
   source     = "./modules/dynamodb"
   table_name = var.table_name
