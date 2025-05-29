@@ -138,8 +138,8 @@ module "cognito" {
 module "api_gateway" {
   source = "./modules/api_gateway"
 
-  http_method           = var.http_method
-  value_path            = var.value_path
+  http_method = var.http_method
+  value_path  = var.value_path
 
   get_http_method       = var.http_method
   get_lambda_arn        = module.get_item.invoke_arn
