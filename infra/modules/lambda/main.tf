@@ -38,25 +38,25 @@ resource "aws_lambda_function" "lambda" {
 }
 
 
-# resource "aws_iam_role_policy" "dynamodb_access" {
-#   count = var.table_name != null ? 1 : 0 # cria a policy apenas se table_name for != null
-#   role  = aws_iam_role.lambda_exec[count.index].name
+resource "aws_iam_role_policy" "dynamodb_access" {
+  count = var.table_name != null ? 1 : 0 # cria a policy apenas se table_name for != null
+  role  = aws_iam_role.lambda_exec[count.index].name
 
-#   policy = jsonencode({
-#     Version = "2012-10-17"
-#     Statement = [
-#       {
-#         Effect = "Allow"
-#         Action = [
-#           "dynamodb:GetItem",
-#           "dynamodb:PutItem",
-#           "dynamodb:UpdateItem",
-#           "dynamodb:DeleteItem",
-#           "dynamodb:Query",
-#           "dynamodb:Scan"
-#         ]
-#         Resource = "arn:aws:dynamodb:*:*:table/${var.table_name}"
-#       }
-#     ]
-#   })
-# }
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:Query",
+          "dynamodb:Scan"
+        ]
+        Resource = "arn:aws:dynamodb:*:*:table/${var.table_name}"
+      }
+    ]
+  })
+}
