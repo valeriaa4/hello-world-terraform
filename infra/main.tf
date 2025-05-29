@@ -57,28 +57,28 @@ module "get_item" {
   depends_on = [module.dynamodb]
 }
 
-#config lambda create_item: zip e module
-# data "archive_file" "create_item" {
-#   type        = "zip"
-#   source_file = "../lambda/create_item/create_item.py"
-#   output_path = "${path.module}/zip/create_item.zip"
-# }
+# config lambda create_item: zip e module
+data "archive_file" "create_item" {
+  type        = "zip"
+  source_file = "../lambda/create_item/create_item.py"
+  output_path = "${path.module}/zip/create_item.zip"
+}
 
-# module "create_item" {
-#   source           = "./modules/lambda"
-#   function_name    = "create-item"
-#   handler          = "create_item.lambda_handler"
-#   runtime          = var.runtime
-#   memory_size      = var.memory_size
-#   timeout          = var.timeout
-#   filename         = data.archive_file.create_item.output_path
-#   source_code_hash = data.archive_file.create_item.output_base64sha256
-#   # table_name       = var.table_name
-#   # environment = {
-#   #   TABLE_NAME = var.table_name
-#   # }
-#   # depends_on = [module.dynamodb]
-# }
+module "create_item" {
+  source           = "./modules/lambda"
+  function_name    = "create-item"
+  handler          = "create_item.lambda_handler"
+  runtime          = var.runtime
+  memory_size      = var.memory_size
+  timeout          = var.timeout
+  filename         = data.archive_file.create_item.output_path
+  source_code_hash = data.archive_file.create_item.output_base64sha256
+  table_name       = var.table_name
+  environment = {
+    TABLE_NAME = var.table_name
+  }
+  depends_on = [module.dynamodb]
+}
 
 # #config lambda update_item: zip e module
 # data "archive_file" "update_item" {
