@@ -141,10 +141,9 @@ module "api_gateway" {
   http_method = var.http_method
   value_path  = var.value_path
 
-  get_http_method  = var.http_method
-  get_lambda_arn   = module.get_item.invoke_arn
-  post_http_method = var.post_http_method
-  # post_lambda_arn       = module.create_item.invoke_arn
+  get_http_method       = var.http_method
+  get_lambda_arn        = module.get_item.function_arn
+  post_http_method      = var.post_http_method
   post_lambda_arn       = module.create_item.function_arn
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
