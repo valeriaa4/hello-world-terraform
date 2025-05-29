@@ -42,4 +42,15 @@ variable "post_value_path" {
   default     = "create"
 }
 
+variable "patch_http_method" {
+  type    = string
+  default = "PATCH"
+}
 
+variable "patch_value_path" {
+  type = string
+}
+
+variable "patch_lambda_arn" {
+  type = string
+}

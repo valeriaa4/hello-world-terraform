@@ -90,9 +90,13 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration.lambda_integration.id,
       aws_api_gateway_method.add_item_api_method.id,
       aws_api_gateway_integration.add_item_integration.id,
-      aws_api_gateway_resource.post_api_resource.id
+      aws_api_gateway_resource.post_api_resource.id,
+      aws_api_gateway_resource.patch_item_resource.id,
+      aws_api_gateway_method.patch_item_method.id,
+      aws_api_gateway_integration.patch_item_integration.id
     ]))
   }
+
 
   lifecycle {
     create_before_destroy = true
@@ -100,7 +104,9 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 
   depends_on = [
     aws_api_gateway_integration.lambda_integration,
-    aws_lambda_permission.apigw_lambda_permission
+    aws_lambda_permission.apigw_lambda_permission,
+    aws_api_gateway_integration.patch_item_integration,
+    aws_lambda_permission.patch_item_permission
   ]
 }
 
@@ -108,4 +114,42 @@ resource "aws_api_gateway_stage" "api_stage" {
   stage_name    = "dev"
   rest_api_id   = aws_api_gateway_rest_api.create_api.id
   deployment_id = aws_api_gateway_deployment.api_deployment.id
+}
+
+# Rota PATCH /lista-tarefa/{item_id}
+resource "aws_api_gateway_resource" "patch_api_resource" {
+  parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
+  path_part   = "lista-tarefa"
+  rest_api_id = aws_api_gateway_rest_api.create_api.id
+}
+
+resource "aws_api_gateway_resource" "patch_item_resource" {
+  parent_id   = aws_api_gateway_resource.patch_api_resource.id
+  path_part   = "{item_id}"
+  rest_api_id = aws_api_gateway_rest_api.create_api.id
+}
+
+resource "aws_api_gateway_method" "patch_item_method" {
+  resource_id   = aws_api_gateway_resource.patch_item_resource.id
+  rest_api_id   = aws_api_gateway_rest_api.create_api.id
+  http_method   = var.patch_http_method
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
+}
+
+resource "aws_api_gateway_integration" "patch_item_integration" {
+  http_method             = aws_api_gateway_method.patch_item_method.http_method
+  resource_id             = aws_api_gateway_resource.patch_item_resource.id
+  rest_api_id             = aws_api_gateway_rest_api.create_api.id
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
+}
+
+resource "aws_lambda_permission" "patch_item_permission" {
+  statement_id  = "AllowExecutionFromAPIGatewayPatch"
+  action        = "lambda:InvokeFunction"
+  function_name = "update-item"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }

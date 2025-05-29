@@ -59,14 +59,14 @@ module "create_item" {
 #config lambda update_item: zip e module
 data "archive_file" "update_item" {
   type        = "zip"
-  source_file = "../lambda/update_item/lambda.py"
+  source_file = "../lambda/update_item/update_item.py"
   output_path = "${path.module}/zip/update_item.zip"
 }
 
 module "update_item" {
   source           = "./modules/lambda"
   function_name    = "update-item"
-  handler          = "lambda.lambda_handler"
+  handler          = "update_item.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
   timeout          = var.timeout
@@ -119,5 +119,9 @@ module "api_gateway" {
   post_lambda_arn       = module.create_item.aws_lambda_function_arn
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
+  patch_http_method     = "PATCH"
+  patch_value_path      = "lista-tarefa/{item_id}"
+  patch_lambda_arn      = module.update_item.aws_lambda_function_arn
+
 }
 

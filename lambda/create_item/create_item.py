@@ -2,10 +2,11 @@ import json
 import boto3
 from datetime import datetime
 from uuid import uuid4
+import os
 
 dynamodb = boto3.resource("dynamodb")
-TABLE = dynamodb.Table("MARKET_LIST")
-
+TABLE = os.environ["DYNAMODB_TABLE_NAME"]
+table = dynamodb.Table(TABLE)
 
 def lambda_handler(event, context):
 
