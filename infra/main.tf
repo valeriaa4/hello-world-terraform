@@ -80,28 +80,28 @@ module "create_item" {
   depends_on = [module.dynamodb]
 }
 
-# #config lambda update_item: zip e module
-# data "archive_file" "update_item" {
-#   type        = "zip"
-#   source_file = "../lambda/update_item/update_item.py"
-#   output_path = "${path.module}/zip/update_item.zip"
-# }
+#config lambda update_item: zip e module
+data "archive_file" "update_item" {
+  type        = "zip"
+  source_file = "../lambda/update_item/update_item.py"
+  output_path = "${path.module}/zip/update_item.zip"
+}
 
-# module "update_item" {
-#   source           = "./modules/lambda"
-#   function_name    = "update-item"
-#   handler          = "update_item.lambda_handler"
-#   runtime          = var.runtime
-#   memory_size      = var.memory_size
-#   timeout          = var.timeout
-#   filename         = data.archive_file.update_item.output_path
-#   source_code_hash = data.archive_file.update_item.output_base64sha256
-#   # table_name       = var.table_name
-#   # environment = {
-#   #   TABLE_NAME = var.table_name
-#   # }
-#   # depends_on = [module.dynamodb]
-# }
+module "update_item" {
+  source           = "./modules/lambda"
+  function_name    = "update-item"
+  handler          = "update_item.lambda_handler"
+  runtime          = var.runtime
+  memory_size      = var.memory_size
+  timeout          = var.timeout
+  filename         = data.archive_file.update_item.output_path
+  source_code_hash = data.archive_file.update_item.output_base64sha256
+  # table_name       = var.table_name
+  # environment = {
+  #   TABLE_NAME = var.table_name
+  # }
+  # depends_on = [module.dynamodb]
+}
 
 # #config lambda delete_item: zip e module
 # data "archive_file" "delete_item" {
