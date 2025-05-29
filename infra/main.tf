@@ -54,7 +54,7 @@ module "get_item" {
   environment = {
     TABLE_NAME = var.table_name
   }
-  depends_on = [module.dynamodb]
+  # depends_on = [module.dynamodb]
 }
 
 #config lambda create_item: zip e module
@@ -77,7 +77,7 @@ module "create_item" {
   environment = {
     TABLE_NAME = var.table_name
   }
-  depends_on = [module.dynamodb]
+  # depends_on = [module.dynamodb]
 }
 
 #config lambda update_item: zip e module
@@ -100,7 +100,7 @@ module "update_item" {
   environment = {
     TABLE_NAME = var.table_name
   }
-  depends_on = [module.dynamodb]
+  # depends_on = [module.dynamodb]
 }
 
 #config lambda delete_item: zip e module
@@ -123,7 +123,7 @@ module "delete_item" {
   environment = {
     TABLE_NAME = var.table_name
   }
-  depends_on = [module.dynamodb]
+  # depends_on = [module.dynamodb]
 }
 
 # module "cognito" {
