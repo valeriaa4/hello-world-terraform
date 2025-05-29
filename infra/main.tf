@@ -126,14 +126,14 @@ module "delete_item" {
   depends_on = [module.dynamodb]
 }
 
-module "cognito" {
-  source = "./modules/cognito"
+# module "cognito" {
+#   source = "./modules/cognito"
 
-  user_pool_name          = "market-user-pool"
-  user_pool_client_name   = "market-client"
-  enable_user_pool_domain = true
-  user_pool_domain        = "market-auth-domain"
-}
+#   user_pool_name          = "market-user-pool"
+#   user_pool_client_name   = "market-client"
+#   enable_user_pool_domain = true
+#   user_pool_domain        = "market-auth-domain"
+# }
 
 # module "api_gateway" {
 #   source = "./modules/api_gateway"
