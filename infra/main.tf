@@ -8,12 +8,12 @@ terraform {
   }
 }
 
-#config lambda hello_terraform: zip e module
-# data "archive_file" "hello_terraform" {
-#   type        = "zip"
-#   source_file = "../lambda/hello_terraform/lambda.py"
-#   output_path = "${path.module}/zip/hello_terraform.zip"
-# }
+# config lambda hello_terraform: zip e module
+data "archive_file" "hello_terraform" {
+  type        = "zip"
+  source_file = "../lambda/hello_terraform/lambda.py"
+  output_path = "${path.module}/zip/hello_terraform.zip"
+}
 
 # module "hello_terraform" {
 #   source           = "./modules/lambda"
