@@ -22,22 +22,18 @@ variable "function_name" {
   type = string
 }
 
-variable "hello_function_name" {
-  type = string
-}
-
 variable "cognito_user_pool_arn" {
   description = "ARN do User Pool do Cognito"
   type        = string
 }
 
-variable "hello_lambda_arn" {
+variable "get_lambda_arn" {
   type = string
 }
 
-
-variable "get_lambda_arn" {
-  type = string
+variable "get_http_method" {
+  description = "Métodos HTTP"
+  type        = string
 }
 
 variable "post_http_method" {
@@ -55,19 +51,15 @@ variable "post_value_path" {
   default     = "create"
 }
 
-variable "get_http_method" {
-  default = "GET"
+variable "patch_http_method" {
+  type    = string
+  default = "PATCH"
 }
 
-variable "hello_http_method" {
-  default = "GET"
-}
-
-variable "get_value_path" {
-  default = "get"
-}
-
-variable "get_function_name" {
+variable "patch_value_path" {
   type = string
 }
 
+variable "patch_lambda_arn" {
+  type = string
+}

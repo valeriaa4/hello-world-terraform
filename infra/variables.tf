@@ -42,28 +42,16 @@ variable "user_pool_domain" {
 
 
 # NOVAS VARIÁVEIS PARA API GATEWAY
-variable "get_http_method" {
+variable "http_method" {
   description = "Métodos HTTP"
   type        = string
   default     = "GET"
 }
 
-variable "hello_value_path" {
+variable "value_path" {
   description = "value_path"
   type        = string
   default     = "hello"
-}
-
-variable "hello_http_method" {
-  description = "Métodos HTTP"
-  type        = string
-  default     = "GET"
-}
-
-variable "post_get_value_path" {
-  description = "value_path"
-  type        = string
-  default     = "lista-tarefa"
 }
 
 variable "region" {
@@ -72,21 +60,8 @@ variable "region" {
   default     = "us-east-1"
 }
 
-
-
 variable "post_http_method" {
   description = "Métodos HTTP"
   type        = string
   default     = "POST"
-}
-
-variable "gateway_lambda_config" {
-  description = "Configurações para criar múltiplos caminhos/métodos para o API Gateway"
-  type = map(object({
-    path        = string
-    http_method = string
-    lambda_arn  = string
-    lambda_name = string
-  }))
-  default = {}
 }

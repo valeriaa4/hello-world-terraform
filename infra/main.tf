@@ -17,9 +17,9 @@ data "archive_file" "hello_terraform" {
 
 module "hello_terraform" {
   source           = "./modules/lambda"
-  function_name    = "hello_terraform"
-  value_path       = var.hello_value_path
-  http_method      = var.get_http_method
+  function_name    = "hello-terraform"
+  value_path       = "hello"
+  http_method      = var.http_method
   handler          = "lambda.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
@@ -35,26 +35,27 @@ module "dynamodb" {
 }
 
 # config lambda get_item: zip e module
-data "archive_file" "get_itens" {
+data "archive_file" "get_item" {
   type        = "zip"
-  source_file = "../lambda/get_item/get_item.py"
-  output_path = "${path.module}/zip/get_item.zip"
+  source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
+  output_path = "${path.module}/zip/get_itens.zip"
 }
 
-module "get_itens" {
+module "get_item" {
   source           = "./modules/lambda"
   function_name    = "get_item"
-  handler          = "lambda.lambda_handler"
+  handler          = "get_item.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
   timeout          = var.timeout
-  filename         = data.archive_file.get_itens.output_path
-  source_code_hash = data.archive_file.get_itens.output_base64sha256
+  filename         = data.archive_file.get_item.output_path
+  source_code_hash = data.archive_file.get_item.output_base64sha256
   table_name       = var.table_name
   environment = {
     TABLE_NAME = var.table_name
   }
 }
+
 #config lambda create_item: zip e module
 data "archive_file" "create_item" {
   type        = "zip"
@@ -80,14 +81,14 @@ module "create_item" {
 #config lambda update_item: zip e module
 data "archive_file" "update_item" {
   type        = "zip"
-  source_file = "../lambda/update_item/lambda.py"
+  source_file = "../lambda/update_item/update_item.py"
   output_path = "${path.module}/zip/update_item.zip"
 }
 
 module "update_item" {
   source           = "./modules/lambda"
   function_name    = "update-item"
-  handler          = "lambda.lambda_handler"
+  handler          = "update_item.lambda_handler"
   runtime          = var.runtime
   memory_size      = var.memory_size
   timeout          = var.timeout
@@ -133,35 +134,17 @@ module "cognito" {
 module "api_gateway" {
   source = "./modules/api_gateway"
 
-  region                = var.region
+  http_method           = var.http_method
+  value_path            = var.value_path
+  invoke_arn            = module.hello_terraform.invoke_arn
+  get_http_method       = var.http_method
+  get_lambda_arn        = module.get_item.invoke_arn
+  post_http_method      = var.post_http_method
+  post_lambda_arn       = module.create_item.invoke_arn
+  function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
+  patch_http_method     = "PATCH"
+  patch_value_path      = "lista-tarefa/{item_id}"
+  patch_lambda_arn      = module.update_item.invoke_arn
 
-  # Configuração base 
-  value_path    = var.post_get_value_path
-  http_method   = var.get_http_method
-  function_name = module.get_itens.function_name
-  invoke_arn    = module.get_itens.invoke_arn
-
-  # Hello
-  hello_function_name = module.hello_terraform.function_name
-  hello_lambda_arn    = module.hello_terraform.invoke_arn
-  hello_http_method   = var.get_http_method
-
-
-  # Configuração específica do GET
-  get_http_method   = var.get_http_method
-  get_lambda_arn    = module.get_itens.invoke_arn
-  get_function_name = module.get_itens.function_name
-
-  # Configuração do POST
-  post_http_method = var.post_http_method
-  post_lambda_arn  = module.create_item.invoke_arn
-  post_value_path  = var.post_get_value_path
-
-  depends_on = [
-    module.hello_terraform,
-    module.get_itens,
-    module.create_item,
-    module.dynamodb
-  ]
 }
