@@ -15,4 +15,3 @@ output "invoke_arn" {
 }
 
 
-
