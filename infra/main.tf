@@ -9,30 +9,30 @@ terraform {
 }
 
 #config lambda hello_terraform: zip e module
-data "archive_file" "hello_terraform" {
-  type        = "zip"
-  source_file = "../lambda/hello_terraform/lambda.py"
-  output_path = "${path.module}/zip/hello_terraform.zip"
-}
+# data "archive_file" "hello_terraform" {
+#   type        = "zip"
+#   source_file = "../lambda/hello_terraform/lambda.py"
+#   output_path = "${path.module}/zip/hello_terraform.zip"
+# }
 
-module "hello_terraform" {
-  source           = "./modules/lambda"
-  function_name    = "hello-terraform"
-  value_path       = "hello"
-  http_method      = var.http_method
-  handler          = "lambda.lambda_handler"
-  runtime          = var.runtime
-  memory_size      = var.memory_size
-  timeout          = var.timeout
-  filename         = data.archive_file.hello_terraform.output_path
-  source_code_hash = data.archive_file.hello_terraform.output_base64sha256
-}
+# module "hello_terraform" {
+#   source           = "./modules/lambda"
+#   function_name    = "hello-terraform"
+#   value_path       = "hello"
+#   http_method      = var.http_method
+#   handler          = "lambda.lambda_handler"
+#   runtime          = var.runtime
+#   memory_size      = var.memory_size
+#   timeout          = var.timeout
+#   filename         = data.archive_file.hello_terraform.output_path
+#   source_code_hash = data.archive_file.hello_terraform.output_base64sha256
+# }
 
-# config dynamodb
-module "dynamodb" {
-  source     = "./modules/dynamodb"
-  table_name = var.table_name
-}
+# # config dynamodb
+# module "dynamodb" {
+#   source     = "./modules/dynamodb"
+#   table_name = var.table_name
+# }
 
 # config lambda get_item: zip e module
 # data "archive_file" "get_item" {
