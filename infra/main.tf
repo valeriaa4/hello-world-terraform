@@ -35,96 +35,96 @@ module "dynamodb" {
 }
 
 # config lambda get_item: zip e module
-data "archive_file" "get_item" {
-  type        = "zip"
-  source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
-  output_path = "${path.module}/zip/get_itens.zip"
-}
+# data "archive_file" "get_item" {
+#   type        = "zip"
+#   source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
+#   output_path = "${path.module}/zip/get_itens.zip"
+# }
 
-module "get_item" {
-  source           = "./modules/lambda"
-  function_name    = "get_item"
-  handler          = "get_item.lambda_handler"
-  runtime          = var.runtime
-  memory_size      = var.memory_size
-  timeout          = var.timeout
-  filename         = data.archive_file.get_item.output_path
-  source_code_hash = data.archive_file.get_item.output_base64sha256
+# module "get_item" {
+#   source           = "./modules/lambda"
+#   function_name    = "get_item"
+#   handler          = "get_item.lambda_handler"
+#   runtime          = var.runtime
+#   memory_size      = var.memory_size
+#   timeout          = var.timeout
+#   filename         = data.archive_file.get_item.output_path
+#   source_code_hash = data.archive_file.get_item.output_base64sha256
   # table_name       = var.table_name
   # environment = {
   #   TABLE_NAME = var.table_name
   # }
   # depends_on = [module.dynamodb]
-}
+# }
 
 #config lambda create_item: zip e module
-data "archive_file" "create_item" {
-  type        = "zip"
-  source_file = "../lambda/create_item/create_item.py"
-  output_path = "${path.module}/zip/create_item.zip"
-}
+# data "archive_file" "create_item" {
+#   type        = "zip"
+#   source_file = "../lambda/create_item/create_item.py"
+#   output_path = "${path.module}/zip/create_item.zip"
+# }
 
-module "create_item" {
-  source           = "./modules/lambda"
-  function_name    = "create-item"
-  handler          = "create_item.lambda_handler"
-  runtime          = var.runtime
-  memory_size      = var.memory_size
-  timeout          = var.timeout
-  filename         = data.archive_file.create_item.output_path
-  source_code_hash = data.archive_file.create_item.output_base64sha256
+# module "create_item" {
+#   source           = "./modules/lambda"
+#   function_name    = "create-item"
+#   handler          = "create_item.lambda_handler"
+#   runtime          = var.runtime
+#   memory_size      = var.memory_size
+#   timeout          = var.timeout
+#   filename         = data.archive_file.create_item.output_path
+#   source_code_hash = data.archive_file.create_item.output_base64sha256
+#   # table_name       = var.table_name
+#   # environment = {
+#   #   TABLE_NAME = var.table_name
+#   # }
+#   # depends_on = [module.dynamodb]
+# }
+
+# #config lambda update_item: zip e module
+# data "archive_file" "update_item" {
+#   type        = "zip"
+#   source_file = "../lambda/update_item/update_item.py"
+#   output_path = "${path.module}/zip/update_item.zip"
+# }
+
+# module "update_item" {
+#   source           = "./modules/lambda"
+#   function_name    = "update-item"
+#   handler          = "update_item.lambda_handler"
+#   runtime          = var.runtime
+#   memory_size      = var.memory_size
+#   timeout          = var.timeout
+#   filename         = data.archive_file.update_item.output_path
+#   source_code_hash = data.archive_file.update_item.output_base64sha256
+#   # table_name       = var.table_name
+#   # environment = {
+#   #   TABLE_NAME = var.table_name
+#   # }
+#   # depends_on = [module.dynamodb]
+# }
+
+# #config lambda delete_item: zip e module
+# data "archive_file" "delete_item" {
+#   type        = "zip"
+#   source_file = "../lambda/delete_item/lambda.py"
+#   output_path = "${path.module}/zip/delete_item.zip"
+# }
+
+# module "delete_item" {
+#   source           = "./modules/lambda"
+#   function_name    = "delete-item"
+#   handler          = "lambda.lambda_handler"
+#   runtime          = var.runtime
+#   memory_size      = var.memory_size
+#   timeout          = var.timeout
+#   filename         = data.archive_file.delete_item.output_path
+#   source_code_hash = data.archive_file.delete_item.output_base64sha256
   # table_name       = var.table_name
   # environment = {
   #   TABLE_NAME = var.table_name
   # }
   # depends_on = [module.dynamodb]
-}
-
-#config lambda update_item: zip e module
-data "archive_file" "update_item" {
-  type        = "zip"
-  source_file = "../lambda/update_item/update_item.py"
-  output_path = "${path.module}/zip/update_item.zip"
-}
-
-module "update_item" {
-  source           = "./modules/lambda"
-  function_name    = "update-item"
-  handler          = "update_item.lambda_handler"
-  runtime          = var.runtime
-  memory_size      = var.memory_size
-  timeout          = var.timeout
-  filename         = data.archive_file.update_item.output_path
-  source_code_hash = data.archive_file.update_item.output_base64sha256
-  # table_name       = var.table_name
-  # environment = {
-  #   TABLE_NAME = var.table_name
-  # }
-  # depends_on = [module.dynamodb]
-}
-
-#config lambda delete_item: zip e module
-data "archive_file" "delete_item" {
-  type        = "zip"
-  source_file = "../lambda/delete_item/lambda.py"
-  output_path = "${path.module}/zip/delete_item.zip"
-}
-
-module "delete_item" {
-  source           = "./modules/lambda"
-  function_name    = "delete-item"
-  handler          = "lambda.lambda_handler"
-  runtime          = var.runtime
-  memory_size      = var.memory_size
-  timeout          = var.timeout
-  filename         = data.archive_file.delete_item.output_path
-  source_code_hash = data.archive_file.delete_item.output_base64sha256
-  # table_name       = var.table_name
-  # environment = {
-  #   TABLE_NAME = var.table_name
-  # }
-  # depends_on = [module.dynamodb]
-}
+# }
 
 # module "cognito" {
 #   source = "./modules/cognito"
