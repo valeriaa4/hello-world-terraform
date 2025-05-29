@@ -63,3 +63,8 @@ variable "patch_value_path" {
 variable "patch_lambda_arn" {
   type = string
 }
+
+variable "lambda_function_name" {
+  description = "Nome da função Lambda que será integrada com o API Gateway"
+  type        = string
+}

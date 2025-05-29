@@ -146,6 +146,8 @@ module "api_gateway" {
   patch_http_method     = "PATCH"
   patch_value_path      = "lista-tarefa/{item_id}"
   patch_lambda_arn      = module.update_item.invoke_arn
+  lambda_function_name  = module.hello_terraform.function_name
+
 
   depends_on = [
     module.get_item,

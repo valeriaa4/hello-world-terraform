@@ -42,7 +42,6 @@ resource "aws_api_gateway_integration" "get_item_integration" {
 
 }
 
-data "aws_caller_identity" "current" {}
 resource "aws_lambda_permission" "get_item_permission" {
   statement_id  = "AllowExecutionFromAPIGatewayGet"
   action        = "lambda:InvokeFunction"
@@ -71,7 +70,7 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.invoke_arn
+  uri                     = local.lambda_invoke_arn
 }
 
 resource "aws_lambda_permission" "apigw_lambda_permission" {
