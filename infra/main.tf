@@ -29,10 +29,10 @@ module "hello_terraform" {
 }
 
 # config dynamodb
-module "dynamodb" {
-  source     = "./modules/dynamodb"
-  table_name = var.table_name
-}
+# module "dynamodb" {
+#   source     = "./modules/dynamodb"
+#   table_name = var.table_name
+# }
 
 # config lambda get_item: zip e module
 data "archive_file" "get_item" {
@@ -50,10 +50,10 @@ module "get_item" {
   timeout          = var.timeout
   filename         = data.archive_file.get_item.output_path
   source_code_hash = data.archive_file.get_item.output_base64sha256
-  table_name       = var.table_name
-  environment = {
-    TABLE_NAME = var.table_name
-  }
+  # table_name       = var.table_name
+  # environment = {
+  #   TABLE_NAME = var.table_name
+  # }
   # depends_on = [module.dynamodb]
 }
 
@@ -73,10 +73,10 @@ module "create_item" {
   timeout          = var.timeout
   filename         = data.archive_file.create_item.output_path
   source_code_hash = data.archive_file.create_item.output_base64sha256
-  table_name       = var.table_name
-  environment = {
-    TABLE_NAME = var.table_name
-  }
+  # table_name       = var.table_name
+  # environment = {
+  #   TABLE_NAME = var.table_name
+  # }
   # depends_on = [module.dynamodb]
 }
 
@@ -96,10 +96,10 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  table_name       = var.table_name
-  environment = {
-    TABLE_NAME = var.table_name
-  }
+  # table_name       = var.table_name
+  # environment = {
+  #   TABLE_NAME = var.table_name
+  # }
   # depends_on = [module.dynamodb]
 }
 
@@ -119,10 +119,10 @@ module "delete_item" {
   timeout          = var.timeout
   filename         = data.archive_file.delete_item.output_path
   source_code_hash = data.archive_file.delete_item.output_base64sha256
-  table_name       = var.table_name
-  environment = {
-    TABLE_NAME = var.table_name
-  }
+  # table_name       = var.table_name
+  # environment = {
+  #   TABLE_NAME = var.table_name
+  # }
   # depends_on = [module.dynamodb]
 }
 

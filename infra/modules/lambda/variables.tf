@@ -34,10 +34,10 @@ variable "environment" {
   default = {}
 }
 
-variable "table_name" {
-  type    = string
-  default = "MARKET_LIST"
-}
+# variable "table_name" {
+#   type    = string
+#   default = "MARKET_LIST"
+# }
 
 variable "http_method" {
   description = "Métodos HTTP"
