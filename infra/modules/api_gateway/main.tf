@@ -45,8 +45,8 @@ resource "aws_lambda_permission" "get_item_permission" {
   statement_id  = "AllowExecutionFromAPIGatewayGet"
   action        = "lambda:InvokeFunction"
   function_name = "get_item"
-  principal = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.create_api.execution_arn}/*/*/*"
 }
 
 resource "aws_api_gateway_resource" "api_resource" {
