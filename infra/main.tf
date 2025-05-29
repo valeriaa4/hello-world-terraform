@@ -96,11 +96,11 @@ module "update_item" {
   timeout          = var.timeout
   filename         = data.archive_file.update_item.output_path
   source_code_hash = data.archive_file.update_item.output_base64sha256
-  # table_name       = var.table_name
-  # environment = {
-  #   TABLE_NAME = var.table_name
-  # }
-  # depends_on = [module.dynamodb]
+  table_name       = var.table_name
+  environment = {
+    TABLE_NAME = var.table_name
+  }
+  depends_on = [module.dynamodb]
 }
 
 # #config lambda delete_item: zip e module
