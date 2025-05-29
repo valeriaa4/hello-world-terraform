@@ -131,30 +131,30 @@ module "cognito" {
   user_pool_domain        = "market-auth-domain"
 }
 
-module "api_gateway" {
-  source = "./modules/api_gateway"
+# module "api_gateway" {
+#   source = "./modules/api_gateway"
 
-  http_method           = var.http_method
-  value_path            = var.value_path
-  invoke_arn            = module.hello_terraform.invoke_arn
-  get_http_method       = var.http_method
-  get_lambda_arn        = module.get_item.invoke_arn
-  post_http_method      = var.post_http_method
-  post_lambda_arn       = module.create_item.invoke_arn
-  function_name         = module.hello_terraform.function_name
-  cognito_user_pool_arn = module.cognito.user_pool_arn
-  patch_http_method     = "PATCH"
-  patch_value_path      = "lista-tarefa/{item_id}"
-  patch_lambda_arn      = module.update_item.invoke_arn
-  lambda_function_name  = module.hello_terraform.function_name
+#   http_method           = var.http_method
+#   value_path            = var.value_path
+#   invoke_arn            = module.hello_terraform.invoke_arn
+#   get_http_method       = var.http_method
+#   get_lambda_arn        = module.get_item.invoke_arn
+#   post_http_method      = var.post_http_method
+#   post_lambda_arn       = module.create_item.invoke_arn
+#   function_name         = module.hello_terraform.function_name
+#   cognito_user_pool_arn = module.cognito.user_pool_arn
+#   patch_http_method     = "PATCH"
+#   patch_value_path      = "lista-tarefa/{item_id}"
+#   patch_lambda_arn      = module.update_item.invoke_arn
+#   lambda_function_name  = module.hello_terraform.function_name
 
 
-  depends_on = [
-    module.get_item,
-    module.create_item,
-    module.update_item,
-    module.dynamodb,
-    module.cognito
-  ]
+#   depends_on = [
+#     module.get_item,
+#     module.create_item,
+#     module.update_item,
+#     module.dynamodb,
+#     module.cognito
+#   ]
 
-}
+# }
