@@ -140,7 +140,7 @@ module "api_gateway" {
 
   http_method           = var.http_method
   value_path            = var.value_path
-  invoke_arn            = module.hello_terraform.invoke_arn
+
   get_http_method       = var.http_method
   get_lambda_arn        = module.get_item.invoke_arn
   post_http_method      = var.post_http_method

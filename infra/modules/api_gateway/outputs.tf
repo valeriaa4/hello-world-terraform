@@ -1,3 +1,3 @@
-output "invoke_arn" {
-  value = var.invoke_arn
-}
+# output "invoke_arn" {
+#   value = var.invoke_arn
+# }
