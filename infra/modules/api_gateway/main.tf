@@ -20,7 +20,7 @@ resource "aws_api_gateway_authorizer" "apigw_authorizer" {
 # Recurso GET 
 resource "aws_api_gateway_resource" "get_item_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
-  path_part   = "lista-tarefa"
+  path_part   = "get-items"
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
@@ -38,9 +38,7 @@ resource "aws_api_gateway_integration" "get_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
-  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
-
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.get_lambda_arn}/invocations"
 }
 
 resource "aws_lambda_permission" "get_item_permission" {
@@ -96,9 +94,7 @@ resource "aws_api_gateway_integration" "add_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
-  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
-
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.post_lambda_arn}/invocations"
 }
 
 resource "aws_lambda_permission" "add_item_permission" {
@@ -156,10 +152,10 @@ resource "aws_api_gateway_stage" "api_stage" {
   deployment_id = aws_api_gateway_deployment.api_deployment.id
 }
 
-# Rota PATCH /lista-tarefa/{item_id}
+# Rota PATCH /update/{item_id}
 resource "aws_api_gateway_resource" "patch_api_resource" {
   parent_id   = aws_api_gateway_rest_api.create_api.root_resource_id
-  path_part   = "lista-tarefa"
+  path_part   = "update"
   rest_api_id = aws_api_gateway_rest_api.create_api.id
 }
 
@@ -183,8 +179,7 @@ resource "aws_api_gateway_integration" "patch_item_integration" {
   rest_api_id             = aws_api_gateway_rest_api.create_api.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  # uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
-  uri = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
+  uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${var.patch_lambda_arn}/invocations"
 
 }
 
