@@ -4,8 +4,8 @@ from datetime import datetime
 import os
 
 dynamodb = boto3.resource("dynamodb")
-TABLE = os.environ["DYNAMODB_TABLE_NAME"]
-table = dynamodb.Table(TABLE)
+TABLE_NAME = os.environ.get('TABLE_NAME', 'MARKET_LIST')
+table = dynamodb.Table(TABLE_NAME)
 
 def lambda_handler(event, context):
     try:
@@ -34,9 +34,16 @@ def lambda_handler(event, context):
                 ),
             }
 
-        name = body.get("name")
-        date = body.get("date")
-        status = body.get("status")
+        name = body.get("name") # opcional
+        date = body.get("date") # obrigatório
+        new_date = body.get("new_date")  # opcional, se quiser mudar a data do item
+        status = body.get("status") #opcional
+
+        if not date:
+            return {
+                "statusCode": 400,
+                "body": json.dumps({"message": "O campo 'date' (data atual) é obrigatório."}),
+            }
 
         if status and status.lower() not in ["todo", "done"]:
             return {
@@ -47,10 +54,9 @@ def lambda_handler(event, context):
             }
 
         pk = f"USER#{user_id}"
-        sk = f"ITEM#{item_id}"
+        sk = f"LIST#{date}ITEM#{item_id}"
 
-    
-        response = TABLE.get_item(Key={"PK": pk, "SK": sk})
+        response = table.get_item(Key={"PK": pk, "SK": sk})
         item = response.get("Item")
 
         if not item:
@@ -64,6 +70,36 @@ def lambda_handler(event, context):
                 ),
             }
 
+        # se mudar a data, cria novo item e deleta o antigo
+        if new_date and new_date != item["date"]:
+            try:
+                datetime.strptime(new_date, "%Y-%m-%d")
+            except ValueError:
+                return {
+                    "statusCode": 400,
+                    "body": json.dumps(
+                        {"message": "Data inválida. Use o formato YYYY-MM-DD."}
+                    ),
+                }
+            new_sk = f"LIST#{new_date}ITEM#{item_id}"
+            new_item = item.copy()
+            new_item["SK"] = new_sk
+            new_item["date"] = new_date
+            if name:
+                new_item["name"] = name
+            if status:
+                new_item["status"] = status.lower()
+            table.put_item(Item=new_item)
+            table.delete_item(Key={"PK": pk, "SK": sk})
+            return {
+                "statusCode": 200,
+                "body": json.dumps({
+                    "message": "Item atualizado com sucesso.",
+                    "item": new_item,
+                }),
+            }
+
+        # se não mudar a data, atualiza os campos opcionais
         update_expression = []
         expression_values = {}
         expression_names = {}
@@ -72,21 +108,6 @@ def lambda_handler(event, context):
             update_expression.append("#name = :name")
             expression_values[":name"] = name
             expression_names["#name"] = "name"
-
-        if date:
-            try:
-                datetime.strptime(date, "%Y-%m-%d")
-            except ValueError:
-                return {
-                    "statusCode": 400,
-                    "body": json.dumps(
-                        {"message": "Data inválida. Use o formato YYYY-MM-DD."}
-                    ),
-                }
-            update_expression.append("#date = :date")
-            expression_values[":date"] = date
-            expression_names["#date"] = "date"
-
         if status:
             update_expression.append("#status = :status")
             expression_values[":status"] = status.lower()
@@ -98,8 +119,7 @@ def lambda_handler(event, context):
                 "body": json.dumps({"message": "Nenhum campo válido para atualizar."}),
             }
 
-        # Realiza o update
-        updated = TABLE.update_item(
+        updated = table.update_item(
             Key={"PK": pk, "SK": sk},
             UpdateExpression="SET " + ", ".join(update_expression),
             ExpressionAttributeNames=expression_names,
@@ -112,7 +132,7 @@ def lambda_handler(event, context):
             "body": json.dumps(
                 {
                     "message": "Item atualizado com sucesso.",
-                    "item": updated["Attributes"],
+                    "item": updated.get("Attributes", {}),
                 }
             ),
         }

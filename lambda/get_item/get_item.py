@@ -1,48 +1,53 @@
 import json
 import boto3
 import os
+from boto3.dynamodb.conditions import Key
 
 TABLE_NAME = os.environ.get('TABLE_NAME', 'MARKET_LIST')
 
 # Inicializa o cliente DynamoDB com a região correta
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-TABLE = dynamodb.Table(TABLE_NAME)
+table = dynamodb.Table(TABLE_NAME)
 
 def lambda_handler(event, context):
     try:
-        # Parse do body 
-        body = json.loads(event.get('body', '{}'))
-        list_id = body.get('listId')
-        item_id = body.get('itemId')
-        
-        if not list_id or not item_id:
+
+        authorizer = event.get("requestContext", {}).get("authorizer", {})
+        claims = authorizer.get("claims") or authorizer.get("jwt", {}).get("claims")
+
+        if not claims or "sub" not in claims:
+            return {
+                "statusCode": 401,
+                "body": json.dumps(
+                    {"message": "Usuário não autenticado ou token inválido."}
+                ),
+            }
+
+        # date como parâmetro path
+        date = event.get("queryStringParameters", {}).get("date")
+        if not date:
             return {
                 'statusCode': 400,
-                'body': json.dumps({'message': 'listId e itemId são obrigatórios'})
+                'body': json.dumps({'message': 'O parâmetro path "date" é obrigatório.'})
             }
         
-        pk = f"LIST#{list_id}"
-        sk = f"ITEM#{item_id}"
-        
         # Busca o item
-        response = TABLE.get_item(Key={'PK': pk, 'SK': sk})
-        item = response.get('Item')
+        response = table.query(
+            IndexName="DateIndex",
+            KeyConditionExpression=Key('date').eq(date)
+        )
+        items = response.get('Items', [])
         
-        if not item:
+        if not items:
             return {
                 'statusCode': 404,
-                'body': json.dumps({'message': 'Item não encontrado'})
+                'body': json.dumps({'message': 'Nenhum item encontrado'})
             }
         
         # Formata a resposta 
         return {
             'statusCode': 200,
-            'body': json.dumps({
-                'listId': list_id,
-                'itemId': item_id,
-                'name': item.get('name'),
-                'status': item.get('status'),
-            })
+            'body': json.dumps({'items': items})
         }
         
     except json.JSONDecodeError:
