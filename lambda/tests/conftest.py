@@ -14,8 +14,8 @@ def user_event(sub="test-user-id"):
 
 @pytest.fixture
 def mock_dynamodb_table_get_item():
-    with patch("update_item.update_item.TABLE") as mock_table:
-        mock_table.get_item.return_value = {"Item": {"PK": "USER#user-123", "SK": "ITEM#item-1"}}
+    with patch("update_item.update_item.table") as mock_table:
+        mock_table.get_item.return_value = {"Item": {"PK": "USER#user-123", "SK": "LIST#2025-05-15ITEM#item-1"}}
         yield mock_table
 
 @pytest.fixture
@@ -26,7 +26,7 @@ def registry_body(user_event):
 
 @pytest.fixture(autouse=True)
 def mock_dynamodb_table():
-    with patch("create_item.create_item.TABLE") as mock_table:
+    with patch("create_item.create_item.table") as mock_table:
         yield mock_table
 
 
@@ -69,28 +69,39 @@ def dynamodb_mock():
             ],
             AttributeDefinitions=[
                 {'AttributeName': 'PK', 'AttributeType': 'S'},
-                {'AttributeName': 'SK', 'AttributeType': 'S'}
+                {'AttributeName': 'SK', 'AttributeType': 'S'},
+                {"AttributeName": "date", "AttributeType": "S"},
             ],
-            BillingMode='PAY_PER_REQUEST'
+            GlobalSecondaryIndexes=[
+                {
+                    "IndexName": "DateIndex",
+                    "KeySchema": [{"AttributeName": "date", "KeyType": "HASH"}],
+                    "Projection": {"ProjectionType": "ALL"},
+                    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5},
+                }
+            ],
+            ProvisionedThroughput={"ReadCapacityUnits": 5, "WriteCapacityUnits": 5},
         )
-
+        
         # Itens de exemplo
         table.put_item(Item={
-            'PK': 'LIST#123',
-            'SK': 'ITEM#1',
+            'PK': 'USER#123',
+            'SK': 'LIST#2025-05-15ITEM#1',
             'name': 'Leite',
+            'date': '2025-05-15',
             'status': 'TODO',
-            'listId': '123',
-            'itemId': '1'
+            'id': '123',
+            'item_id': '1'
         })
 
         table.put_item(Item={
-            'PK': 'LIST#123',
-            'SK': 'ITEM#2',
+            'PK': 'USER#1234',
+            'SK': 'LIST#2025-05-15ITEM#2',
             'name': 'Arroz',
+            'date': '2025-05-15',
             'status': 'DONE',
-            'listId': '123',
-            'itemId': '2'
+            'id': '1234',
+            'item_id': '2'
         })
 
         yield table
