@@ -37,7 +37,7 @@ module "dynamodb" {
 # config lambda get_item: zip e module
 data "archive_file" "get_item" {
   type        = "zip"
-  source_file = "../lambda/get_item/get_item.py" # Crie este arquivo com o código da Lambda GET
+  source_file = "../lambda/get_item/get_item.py"
   output_path = "${path.module}/zip/get_itens.zip"
 }
 
@@ -138,9 +138,9 @@ module "cognito" {
 module "api_gateway" {
   source = "./modules/api_gateway"
 
-  http_method = var.http_method
-  value_path  = var.value_path
-
+  http_method           = var.http_method
+  value_path            = var.value_path
+  lambda_function_name  = module.hello_terraform.function_name
   get_http_method       = var.http_method
   get_lambda_arn        = module.get_item.function_arn
   post_http_method      = var.post_http_method
@@ -148,10 +148,8 @@ module "api_gateway" {
   function_name         = module.hello_terraform.function_name
   cognito_user_pool_arn = module.cognito.user_pool_arn
   patch_http_method     = "PATCH"
-  patch_value_path      = "lista-tarefa/{item_id}"
-  patch_lambda_arn      = module.update_item.invoke_arn
-  lambda_function_name  = module.hello_terraform.function_name
-
+  patch_value_path      = "update/{item_id}"
+  patch_lambda_arn      = module.update_item.function_arn
 
   depends_on = [
     module.get_item,
