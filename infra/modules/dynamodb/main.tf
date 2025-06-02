@@ -15,15 +15,15 @@ resource "aws_dynamodb_table" "market_list" {
   }
 
   attribute {
-  name = "date"
-  type = "S"
+    name = "date"
+    type = "S"
   }
 
   global_secondary_index {
-    name               = "DateIndex"
-    hash_key           = "date"
-    projection_type    = "ALL"
-    read_capacity      = 5
-    write_capacity     = 5
+    name            = "DateIndex"
+    hash_key        = "date"
+    projection_type = "ALL"
+    read_capacity   = 5
+    write_capacity  = 5
   }
 }
