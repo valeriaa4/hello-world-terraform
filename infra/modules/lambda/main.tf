@@ -37,7 +37,6 @@ resource "aws_lambda_function" "lambda" {
   }
 }
 
-
 resource "aws_iam_role_policy" "dynamodb_access" {
   count = var.table_name != null ? 1 : 0 # cria a policy apenas se table_name for != null
   role  = aws_iam_role.lambda_exec[count.index].name
@@ -55,7 +54,10 @@ resource "aws_iam_role_policy" "dynamodb_access" {
           "dynamodb:Query",
           "dynamodb:Scan"
         ]
-        Resource = "arn:aws:dynamodb:*:*:table/${var.table_name}"
+        Resource = [
+          "arn:aws:dynamodb:*:*:table/${var.table_name}",
+          "arn:aws:dynamodb:us-east-1:699593689653:table/${var.table_name}/index/DateIndex"
+        ]
       }
     ]
   })

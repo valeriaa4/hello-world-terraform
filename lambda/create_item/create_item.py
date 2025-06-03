@@ -5,7 +5,7 @@ from uuid import uuid4
 import os
 
 dynamodb = boto3.resource("dynamodb")
-TABLE = os.environ["DYNAMODB_TABLE_NAME"]
+TABLE = os.environ.get('TABLE_NAME', 'MARKET_LIST')
 table = dynamodb.Table(TABLE)
 
 def lambda_handler(event, context):
@@ -49,12 +49,12 @@ def lambda_handler(event, context):
             }
 
         item_id = str(uuid4())
-        sk = f"ITEM#{item_id}"
+        sk = f"LIST#{data}ITEM#{item_id}"
         pk = f"USER#{user_id}"
 
-        item = {"PK": pk, "SK": sk, "name": nome, "date": data, "status": "todo"}
+        item = {"PK": pk, "SK": sk, "name": nome, "date": data, "status": "todo", "item_id": item_id}
 
-        TABLE.put_item(Item=item, ConditionExpression="attribute_not_exists(SK)")
+        table.put_item(Item=item, ConditionExpression="attribute_not_exists(SK)")
 
         return {
             "statusCode": 200,

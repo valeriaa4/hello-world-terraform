@@ -1,6 +1,10 @@
+from datetime import date
 import json
-from create_item.create_item import lambda_handler
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from create_item.create_item import lambda_handler
 
 def test_post_item_success(mock_dynamodb_table, user_event, registry_body):
 
@@ -18,7 +22,7 @@ def test_post_item_success(mock_dynamodb_table, user_event, registry_body):
         body["item"]["PK"]
         == f"USER#{user_event['requestContext']['authorizer']['jwt']['claims']['sub']}"
     )
-    assert body["item"]["SK"].startswith("ITEM#")
+    assert body["item"]["SK"].startswith(f"LIST#{body['item']['date']}ITEM#")
 
     mock_dynamodb_table.put_item.assert_called_once()
 
